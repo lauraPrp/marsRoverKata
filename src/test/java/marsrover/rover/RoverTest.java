@@ -1,4 +1,5 @@
 package marsrover.rover;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,10 +15,11 @@ public class RoverTest {
 
 
     @Test
-    public void gettingInputCommands(){
+    public void gettingInputCommands() {
         Rover rover = new Rover();
-          int linesNumber=  rover.getInput();
-         assertEquals(3,linesNumber);
+        Coordinates plateauGrid = rover.getPlateau();
+        assertEquals(5, plateauGrid.getMaxX());
+        assertEquals(5, plateauGrid.getMaxY());
     }
 
 
