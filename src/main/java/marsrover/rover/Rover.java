@@ -15,13 +15,18 @@ public class Rover {
     public ArrayList getInputFromFile(String filename) throws  FileNotFoundException{
         Scanner scanner = new Scanner(new File(filename));
 
-        ArrayList<String> fileContents = new ArrayList<>();
+        ArrayList<String> allDataInput = new ArrayList<>();
 
         while (scanner.hasNext()) {
-            fileContents.add(scanner.nextLine());
+            allDataInput.add(scanner.nextLine());
         }
         scanner.close();
-        return fileContents;
+//extract plateau dimension from input
+        String[] plat = allDataInput.get(0).split(" ");
+        plateau = new Coordinates(Integer.parseInt(plat[0]), Integer.parseInt(plat[1]));
+//extract Rovers position and command
+
+        return allDataInput;
     }
 
 }
