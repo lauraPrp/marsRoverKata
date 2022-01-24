@@ -1,0 +1,8 @@
+<application>
+  <component name="DependencyUISettings">
+    <option name="SCOPE_TYPE" value="file" />
+  </component>
+  <component name="UISettings">
+    <option name="MAX_LOOKUP_WIDTH2" value="956" />
+  </component>
+</application>
