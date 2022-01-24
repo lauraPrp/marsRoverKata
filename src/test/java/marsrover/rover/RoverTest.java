@@ -1,8 +1,15 @@
 package marsrover.rover;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.testng.annotations.BeforeTest;
+
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class RoverTest {
 
@@ -15,12 +22,16 @@ public class RoverTest {
 
 
     @Test
-    public void gettingInputCommands() {
+    public void wrongFileInputCommands ()  throws FileNotFoundException {
         Rover rover = new Rover();
-        Coordinates plateauGrid = rover.getPlateau();
-        assertEquals(5, plateauGrid.getMaxX());
-        assertEquals(5, plateauGrid.getMaxY());
+        assertThrows(FileNotFoundException.class, () -> rover.getInputFromFile("fileNotPresent.txt"));
     }
+    @Test
+    public void gettingInputCommands ()  throws FileNotFoundException {
+        Rover rover = new Rover();
+        rover.getInputFromFile("testInput.txt");
+    }
+
 
 
 }
