@@ -30,6 +30,10 @@ public class RoverTest {
     public void gettingInputCommands ()  throws FileNotFoundException {
         Rover rover = new Rover();
         rover.getInputFromFile("testInput.txt");
+        Coordinates plateauGrid = rover.getPlateau();
+
+        assertEquals(5, plateauGrid.getMaxX());
+        assertEquals(5, plateauGrid.getMaxY());
     }
 
 
