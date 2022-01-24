@@ -1,3 +1,5 @@
+package marsrover.rover;
+
 public class Rover {
 
     public int getInput() {
