@@ -1,13 +1,10 @@
 package marsrover.rover;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Scanner;
-
 public class Rover {
 
+
     private Coordinates roverStart;
-    private String directionStart;
+    private String direction;
     private String movementCommandList;
 
 
@@ -22,7 +19,7 @@ public class Rover {
 
     public Rover(Coordinates start, String direction) {
         this.roverStart = start;
-        this.directionStart = direction;
+        this.direction = direction;
     }
 
 
@@ -31,7 +28,7 @@ public class Rover {
     }
 
     public String getRoverdirection() {
-        return directionStart;
+        return direction;
     }
 
     public void setRoverLocation(Coordinates newCoordinates) {
@@ -39,8 +36,20 @@ public class Rover {
     }
 
     public void setRoverdirection(String newDirection) {
-        this.directionStart = newDirection;
+        this.direction = newDirection;
     }
+
+    public Rover command(Rover rover, String command) throws IllegalStateException{
+    if (command.equals("R")){
+       String actualDir= rover.getRoverdirection();
+       //rotate accordimngly
+       rover.setRoverdirection("");
+
+    }
+    else throw new IllegalStateException("command invalid");
+        return rover;
+    }
+
 }
 
 
