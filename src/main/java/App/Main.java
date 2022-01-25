@@ -40,6 +40,7 @@ public class Main {
 
     public ArrayList<Rover> initRovers() {
 //extract Rovers position and command
+        Plateau grid = initPlateau();
         ArrayList allRovers = new ArrayList();
         System.out.println("------------------" + input);
 //[5, 5, 1, 2, N, LMLMLMLMM, 3, 3, E, MMRMMRMRRM]
@@ -51,7 +52,7 @@ public class Main {
             // roverStart = new Coordinates(Integer.parseInt(allDataInput.get(i)), Integer.parseInt(allDataInput.get(i + 1)));
             // System.out.println("------------------------------------------"+roverStart.toString());
             Rover roverToList = new Rover(new Coordinates(Integer.parseInt(input.get(i)), Integer.parseInt(input.get(i + 1)))
-                    , input.get(i + 2));
+                    , input.get(i + 2),grid);
             roverToList.setMovementCommandList(input.get(i + 3));
             allRovers.add(roverToList);
             // movementCommandList  = allDataInput.get(i+1).split(" ")    ;
@@ -65,4 +66,5 @@ public class Main {
     public int getRoverCount() {
         return roverCount;
     }
+
 }

@@ -3,10 +3,14 @@ package marsrover.rover;
 public class Rover {
 
 
-    private Coordinates roverStart;
+    private Coordinates roverCoordinates;
     private String direction;
     private String movementCommandList;
+    private Plateau plateau;
 
+    public Plateau getPlateau() {
+        return plateau;
+    }
 
     public String getMovementCommandList() {
         return movementCommandList;
@@ -17,14 +21,15 @@ public class Rover {
     }
 
 
-    public Rover(Coordinates start, String direction) {
-        this.roverStart = start;
+    public Rover(Coordinates start, String direction, Plateau grid) {
+        this.roverCoordinates = start;
         this.direction = direction;
+        this.plateau = grid;
     }
 
 
     public Coordinates getRoverLocation() {
-        return roverStart;
+        return roverCoordinates;
     }
 
     public String getRoverdirection() {
@@ -32,74 +37,80 @@ public class Rover {
     }
 
     public void setRoverLocation(Coordinates newCoordinates) {
-        this.roverStart = newCoordinates;
+        this.roverCoordinates = newCoordinates;
     }
 
     public void setRoverdirection(String newDirection) {
         this.direction = newDirection;
     }
 
-    public Rover command(Rover rover, String command) throws IllegalStateException{
-        //NESW
-        //R +1
-        //L -1
-    String dir = rover.getRoverdirection();
-        if (command.equals("R")){
-     // turnRight();
-            if(dir.equals("N")){
-            dir="E";
-            }
-            else if(dir.equals("E")){
-                dir="S";
-            }
-            else if(dir.equals("S")){
-                dir="W";
-            }
-            else if(dir.equals("W")){
-                dir="N";
-            }else{
+    public Rover command(Rover rover, String command) throws IllegalStateException {
+        String dir = rover.getRoverdirection();
+        Coordinates actualCoord = rover.getRoverLocation();
+        Plateau grid = rover.getPlateau();
+        if (command.equals("R")) {
+           if (dir.equals("N")) {
+                dir = "E";
+            } else if (dir.equals("E")) {
+                dir = "S";
+            } else if (dir.equals("S")) {
+                dir = "W";
+            } else if (dir.equals("W")) {
+                dir = "N";
+            } else {
                 throw new UnsupportedOperationException("Error: cant turn a way that is not NSWE");
             }
 
-    } else if(command.equals("L")){
-       // turnLeft();
-            if(dir.equals("N")){
-                dir="W";
-            }
-            else if(dir.equals("W")){
-                dir="S";
-            }
-            else if(dir.equals("S")){
-                dir="E";
-            }
-            else if(dir.equals("E")){
-                dir="N";
-            }else{
+        } else if (command.equals("L")) {
+            if (dir.equals("N")) {
+                dir = "W";
+            } else if (dir.equals("W")) {
+                dir = "S";
+            } else if (dir.equals("S")) {
+                dir = "E";
+            } else if (dir.equals("E")) {
+                dir = "N";
+            } else {
                 throw new UnsupportedOperationException("Error: cant turn a way that is not NSWE");
             }
-    }else if(command.equals("M")){
-       // moveOne();
-            if(dir.equals("N")){
-                //y+1
+        } else if (command.equals("M")) {
+            if (dir.equals("N")) {
+                actualCoord.setY(actualCoord.getY() + 1);
 
-            }
-            else if(dir.equals("W")){
-            //x-1
-            }
-            else if(dir.equals("S")){
-                //y-1
-            }
-            else if(dir.equals("E")){
-                //x+1
-            }else{
+            } else if (dir.equals("W")) {
+                actualCoord.setX(actualCoord.getX() - 1);
+            } else if (dir.equals("S")) {
+                actualCoord.setY(actualCoord.getY() - 1);
+            } else if (dir.equals("E")) {
+                actualCoord.setX(actualCoord.getX() + 1);
+            } else {
                 throw new UnsupportedOperationException("Error: invalid attempt to move");
             }
-    }
-    else throw new IllegalStateException("Error: command invalid");
+            if (isMovementValid(actualCoord,rover.getPlateau())) {
+                setRoverLocation(actualCoord);
+            } else {
+                throw new UnsupportedOperationException("Error: new Coordinates not valid");
+            }
+        } else throw new IllegalStateException("Error: command invalid");
 
-    rover.setRoverdirection(dir);
+        rover.setRoverdirection(dir);
+
 
         return rover;
+    }
+
+
+
+    public boolean isMovementValid(Coordinates coordinates, Plateau grid) {
+        boolean isValid = true;
+        if (coordinates.getX() < 0
+                || coordinates.getY() < 0
+                || coordinates.getX() > grid.getMaxX()
+                || coordinates.getY() > grid.getMaxY()
+        )
+            return false;
+
+        return isValid;
     }
 
  /*   private Rover moveOne() {
