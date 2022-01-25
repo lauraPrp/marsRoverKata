@@ -40,16 +40,79 @@ public class Rover {
     }
 
     public Rover command(Rover rover, String command) throws IllegalStateException{
-    if (command.equals("R")){
-       String actualDir= rover.getRoverdirection();
-       //rotate accordimngly
-       rover.setRoverdirection("");
+        //NESW
+        //R +1
+        //L -1
+    String dir = rover.getRoverdirection();
+        if (command.equals("R")){
+     // turnRight();
+            if(dir.equals("N")){
+            dir="E";
+            }
+            else if(dir.equals("E")){
+                dir="S";
+            }
+            else if(dir.equals("S")){
+                dir="W";
+            }
+            else if(dir.equals("W")){
+                dir="N";
+            }else{
+                throw new UnsupportedOperationException("Error: cant turn a way that is not NSWE");
+            }
 
+    } else if(command.equals("L")){
+       // turnLeft();
+            if(dir.equals("N")){
+                dir="W";
+            }
+            else if(dir.equals("W")){
+                dir="S";
+            }
+            else if(dir.equals("S")){
+                dir="E";
+            }
+            else if(dir.equals("E")){
+                dir="N";
+            }else{
+                throw new UnsupportedOperationException("Error: cant turn a way that is not NSWE");
+            }
+    }else if(command.equals("M")){
+       // moveOne();
+            if(dir.equals("N")){
+                //y+1
+
+            }
+            else if(dir.equals("W")){
+            //x-1
+            }
+            else if(dir.equals("S")){
+                //y-1
+            }
+            else if(dir.equals("E")){
+                //x+1
+            }else{
+                throw new UnsupportedOperationException("Error: invalid attempt to move");
+            }
     }
-    else throw new IllegalStateException("command invalid");
+    else throw new IllegalStateException("Error: command invalid");
+
+    rover.setRoverdirection(dir);
+
         return rover;
     }
 
+ /*   private Rover moveOne() {
+        getRoverdirection();
+        getRoverLocation();
+    }
+
+    private void turnLeft() {
+    }
+
+    private void turnRight() {
+    }
+*/
 }
 
 

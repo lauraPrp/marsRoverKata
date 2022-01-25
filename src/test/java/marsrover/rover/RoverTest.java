@@ -22,6 +22,20 @@ public class RoverTest {
         assertThrows(IllegalStateException.class, () -> rover.command(rover,"Invalid command"));
         rover.command(rover,"R");
         assertEquals("E",rover.getRoverdirection() , "turn right");
+        rover.command(rover,"R");
+        assertEquals("S",rover.getRoverdirection() , "turn right");
+        rover.command(rover,"R");
+        assertEquals("W",rover.getRoverdirection() , "turn right");
+        rover.command(rover,"R");
+        assertEquals("N",rover.getRoverdirection() , "turn right");
+        rover.command(rover,"L");
+        assertEquals("W",rover.getRoverdirection() , "turn left");
+        rover.command(rover,"L");
+        assertEquals("S",rover.getRoverdirection() , "turn left");
+        rover.command(rover,"L");
+        assertEquals("E",rover.getRoverdirection() , "turn left");
+        rover.command(rover,"L");
+        assertEquals("N",rover.getRoverdirection() , "turn left");
     }
 
 
