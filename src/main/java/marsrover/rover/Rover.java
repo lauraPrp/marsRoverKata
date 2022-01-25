@@ -2,11 +2,10 @@ package marsrover.rover;
 
 public class Rover {
 
-
     private Coordinates roverCoordinates;
     private String direction;
     private String movementCommandList;
-    private Plateau plateau;
+    private final Plateau plateau;
 
     public Plateau getPlateau() {
         return plateau;
@@ -32,7 +31,7 @@ public class Rover {
         return roverCoordinates;
     }
 
-    public String getRoverdirection() {
+    public String getRoverDirection() {
         return direction;
     }
 
@@ -45,85 +44,71 @@ public class Rover {
     }
 
     public Rover command(Rover rover, String command) throws IllegalStateException {
-        String dir = rover.getRoverdirection();
-        Coordinates actualCoord = rover.getRoverLocation();
-        Plateau grid = rover.getPlateau();
-        if (command.equals("R")) {
-           if (dir.equals("N")) {
-                dir = "E";
-            } else if (dir.equals("E")) {
-                dir = "S";
-            } else if (dir.equals("S")) {
-                dir = "W";
-            } else if (dir.equals("W")) {
-                dir = "N";
-            } else {
-                throw new UnsupportedOperationException("Error: cant turn a way that is not NSWE");
-            }
-
-        } else if (command.equals("L")) {
-            if (dir.equals("N")) {
-                dir = "W";
-            } else if (dir.equals("W")) {
-                dir = "S";
-            } else if (dir.equals("S")) {
-                dir = "E";
-            } else if (dir.equals("E")) {
-                dir = "N";
-            } else {
-                throw new UnsupportedOperationException("Error: cant turn a way that is not NSWE");
-            }
-        } else if (command.equals("M")) {
-            if (dir.equals("N")) {
-                actualCoord.setY(actualCoord.getY() + 1);
-
-            } else if (dir.equals("W")) {
-                actualCoord.setX(actualCoord.getX() - 1);
-            } else if (dir.equals("S")) {
-                actualCoord.setY(actualCoord.getY() - 1);
-            } else if (dir.equals("E")) {
-                actualCoord.setX(actualCoord.getX() + 1);
-            } else {
-                throw new UnsupportedOperationException("Error: invalid attempt to move");
-            }
-            if (isMovementValid(actualCoord,rover.getPlateau())) {
-                setRoverLocation(actualCoord);
-            } else {
-                throw new UnsupportedOperationException("Error: new Coordinates not valid");
-            }
-        } else throw new IllegalStateException("Error: command invalid");
+        String dir = rover.getRoverDirection();
+        switch (command) {
+            case "R" -> dir = turnRight(dir);
+            case "L" -> dir = turnLeft(dir);
+            case "M" -> rover = move(rover);
+            default -> throw new IllegalStateException("Error: command invalid");
+        }
 
         rover.setRoverdirection(dir);
-
-
+//todo:add rover to moved list to check collisions later
         return rover;
     }
 
 
-
-    public boolean isMovementValid(Coordinates coordinates, Plateau grid) {
+    public boolean isMovementValid(Coordinates targetPlace, Plateau grid) {
         boolean isValid = true;
-        if (coordinates.getX() < 0
-                || coordinates.getY() < 0
-                || coordinates.getX() > grid.getMaxX()
-                || coordinates.getY() > grid.getMaxY()
+        if (targetPlace.getX() < 0
+                || targetPlace.getY() < 0
+                || targetPlace.getX() > grid.getMaxX()
+                || targetPlace.getY() > grid.getMaxY()
         )
             return false;
 
         return isValid;
     }
 
- /*   private Rover moveOne() {
-        getRoverdirection();
-        getRoverLocation();
+    private Rover move(Rover roverMoving) {
+        String dir = roverMoving.getRoverDirection();
+        Coordinates actualCoord = roverMoving.getRoverLocation();
+
+        switch (dir) {
+            case "N" -> actualCoord.setY(actualCoord.getY() + 1);
+            case "W" -> actualCoord.setX(actualCoord.getX() - 1);
+            case "S" -> actualCoord.setY(actualCoord.getY() - 1);
+            case "E" -> actualCoord.setX(actualCoord.getX() + 1);
+            default -> throw new UnsupportedOperationException("Error: new Coordinates not valid");
+        }
+
+        return roverMoving;
     }
 
-    private void turnLeft() {
+    private String turnLeft(String dir) {
+        switch (dir) {
+            case "N" -> dir = "W";
+            case "W" -> dir = "S";
+            case "S" -> dir = "E";
+            case "E" -> dir = "N";
+            default -> throw new UnsupportedOperationException("Error: cant turn a way that is not NSWE");
+        }
+
+        return dir;
     }
 
-    private void turnRight() {
+    private String turnRight(String dir) {
+        switch (dir) {
+            case "N" -> dir = "E";
+            case "E" -> dir = "S";
+            case "S" -> dir = "W";
+            case "W" -> dir = "N";
+            default -> throw new UnsupportedOperationException("Error: cant turn a way that is not NSWE");
+        }
+        return dir;
+
     }
-*/
+
 }
 
 

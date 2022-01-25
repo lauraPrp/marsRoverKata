@@ -6,20 +6,16 @@ import marsrover.rover.Rover;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 
 public class Main {
-    ArrayList<String> input = new ArrayList();
-    private static Plateau plateau;
+
+
+    private ArrayList<String> input = new ArrayList<>();
     private int roverCount;
 
-
-    /*public Plateau getPlateau() {
-        return plateau;
-    }*/
     public void getInputFromFile(String filename) throws FileNotFoundException {
         Scanner scanner = new Scanner(new File(filename));
 
@@ -29,42 +25,52 @@ public class Main {
             allDataInput.add(scanner.next());
         }
         scanner.close();
-        this.input=allDataInput;
+        setInput(allDataInput);
     }
 
     public Plateau initPlateau() {
-//extract plateau dimension from input
         String[] plat = input.get(0).split("");
         return new Plateau(Integer.parseInt(input.get(0)), Integer.parseInt(input.get(1)));
     }
 
+    /*
+    from the second row of the input text file details of each single rover are listed in two rows
+    so the first rover will be detailed in row 2 and row 3,
+    the second rover 2 in row 4 and row 5 and so on for any following rover(if present).
+     */
     public ArrayList<Rover> initRovers() {
-//extract Rovers position and command
         Plateau grid = initPlateau();
-        ArrayList allRovers = new ArrayList();
-        System.out.println("------------------" + input);
-//[5, 5, 1, 2, N, LMLMLMLMM, 3, 3, E, MMRMMRMRRM]
+        ArrayList<Rover> allRovers = new ArrayList<>();
 
-        // for(int i=2;i<allDataInput.size();i+=4){
         for (int i = 2; i < input.size(); i += 4) {
 
-            //System.out.println(i+ " "+allDataInput.get(i));
-            // roverStart = new Coordinates(Integer.parseInt(allDataInput.get(i)), Integer.parseInt(allDataInput.get(i + 1)));
-            // System.out.println("------------------------------------------"+roverStart.toString());
-            Rover roverToList = new Rover(new Coordinates(Integer.parseInt(input.get(i)), Integer.parseInt(input.get(i + 1)))
-                    , input.get(i + 2),grid);
+            Rover roverToList = new Rover(
+                    new Coordinates(Integer.parseInt(input.get(i)), Integer.parseInt(input.get(i + 1))),
+                    input.get(i + 2),
+                    grid);
+
             roverToList.setMovementCommandList(input.get(i + 3));
             allRovers.add(roverToList);
-            // movementCommandList  = allDataInput.get(i+1).split(" ")    ;
-            // allRovers.add(allDataInput.get(i+4));
         }
-        // roverCount = allRovers.size();
+        roverCount = allRovers.size();
         return allRovers;
     }
 
+    public ArrayList<String> getInput() {
+        return input;
+    }
+
+    private void setInput(ArrayList<String> input) {
+        this.input = input;
+    }
 
     public int getRoverCount() {
         return roverCount;
     }
 
+    public boolean validateInputFileData() {
+        // if (input.size() > 6) { //6 is the minimum number of data : 2 numbers Plateau,2 numbers and a char for the rover and a String for commands
+        //     }
+        return true;
+    }
 }
