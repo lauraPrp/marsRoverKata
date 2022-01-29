@@ -2,6 +2,8 @@ package marsrover.rover;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -92,10 +94,24 @@ public class RoverTest {
     }
 
     @Test
-    public void InvalidCommandInput() throws IllegalStateException {
+    public void invalidCommandInput() throws IllegalStateException {
         Plateau grid = new Plateau(10, 10);
         Rover rover = new Rover(new Coordinates(1, 2), "N", grid);
 
         assertThrows(IllegalStateException.class,() -> rover.command(rover, "X"));
     }
+
+    @Test
+    public void  invalidMoveObstacleFound() throws IllegalStateException {
+        Plateau grid = new Plateau(10, 10);
+        Rover rover = new Rover(new Coordinates(1, 2), "N", grid);
+        ArrayList<Coordinates> obstacles  = new ArrayList<>();
+        obstacles.add(new Coordinates(1,5));
+        rover.command(rover,"M");
+        rover.command(rover,"M");
+        System.out.println(rover.getRoverLocation().getX() +" " + rover.getRoverLocation().getY());
+        assertThrows(IllegalStateException.class,() -> rover.command(rover, "M"));
+    }
+
+
 }
