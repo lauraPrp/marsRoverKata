@@ -1,5 +1,8 @@
 package marsrover.rover;
 
+import java.util.ArrayList;
+import java.lang.UnsupportedOperationException;
+
 public class Rover {
 
     private Coordinates roverCoordinates;
@@ -70,18 +73,30 @@ public class Rover {
         return isValid;
     }
 
+    private boolean isThereAnObstacleinNextStep(Coordinates newCoordinates){
+        ArrayList<Coordinates> obstacles = new ArrayList<>();
+
+        return obstacles.contains(newCoordinates);
+    }
+
     private Rover move(Rover roverMoving) {
         String dir = roverMoving.getRoverDirection();
         Coordinates actualCoord = roverMoving.getRoverLocation();
+        Coordinates newCoordinates = roverMoving.getRoverLocation();
 
         switch (dir) {
-            case "N" -> actualCoord.setY(actualCoord.getY() + 1);
-            case "W" -> actualCoord.setX(actualCoord.getX() - 1);
-            case "S" -> actualCoord.setY(actualCoord.getY() - 1);
-            case "E" -> actualCoord.setX(actualCoord.getX() + 1);
+            case "N" -> newCoordinates.setY(actualCoord.getY() + 1);
+            case "W" -> newCoordinates.setX(actualCoord.getX() - 1);
+            case "S" -> newCoordinates.setY(actualCoord.getY() - 1);
+            case "E" -> newCoordinates.setX(actualCoord.getX() + 1);
             default -> throw new UnsupportedOperationException("Error: new Coordinates not valid");
         }
 
+        if(isThereAnObstacleinNextStep(newCoordinates)){
+            throw new UnsupportedOperationException("Error: obstacle in the way");
+        } else{
+            roverMoving.setRoverLocation(newCoordinates);
+        }
         return roverMoving;
     }
 
