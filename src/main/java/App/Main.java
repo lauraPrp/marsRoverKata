@@ -46,10 +46,10 @@ public class Main {
 
             Rover roverToList = new Rover(
                     new Coordinates(Integer.parseInt(input.get(i)), Integer.parseInt(input.get(i + 1))),
-                    input.get(i + 2),
+                    input.get(i + 2).charAt(0),
                     grid);
 
-            roverToList.setMovementCommandList(input.get(i + 3));
+            roverToList.setMovementCommandList(input.get(i + 3).toCharArray());
             allRovers.add(roverToList);
         }
         roverCount = allRovers.size();

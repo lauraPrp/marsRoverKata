@@ -1,32 +1,33 @@
 package marsrover.rover;
 
 import java.util.ArrayList;
-import java.lang.UnsupportedOperationException;
 
 public class Rover {
 
     private Coordinates roverCoordinates;
-    private String direction;
-    private String movementCommandList;
+    private char direction;
+    private char[] movementCommandList;
     private final Plateau plateau;
+    boolean pathCompleted;
 
     public Plateau getPlateau() {
         return plateau;
     }
 
-    public String getMovementCommandList() {
+    public char[] getMovementCommandList() {
         return movementCommandList;
     }
 
-    public void setMovementCommandList(String movementCommandList) {
+    public void setMovementCommandList(char[] movementCommandList) {
         this.movementCommandList = movementCommandList;
     }
 
 
-    public Rover(Coordinates start, String direction, Plateau grid) {
+    public Rover(Coordinates start, char direction, Plateau grid) {
         this.roverCoordinates = start;
         this.direction = direction;
         this.plateau = grid;
+        this.pathCompleted=false;
     }
 
 
@@ -34,7 +35,7 @@ public class Rover {
         return roverCoordinates;
     }
 
-    public String getRoverDirection() {
+    public char getRoverDirection() {
         return direction;
     }
 
@@ -42,21 +43,43 @@ public class Rover {
         this.roverCoordinates = newCoordinates;
     }
 
-    public void setRoverdirection(String newDirection) {
+    public void setRoverdirection(char newDirection) {
         this.direction = newDirection;
     }
 
-    public Rover command(Rover rover, String command) throws IllegalStateException {
-        String dir = rover.getRoverDirection();
+
+
+    public Rover executeCommandList(Rover rover) throws UnsupportedOperationException{
+    	char[] commandlist = rover.getMovementCommandList();
+    	try {
+    	for (char element : commandlist) {
+    		rover = singleCommand(rover,element);
+    	}
+    	}catch( UnsupportedOperationException use) {
+    		use.printStackTrace();
+    		}
+    	finally {
+
+    	    		rover.pathCompleted=true;
+    	    		plateau.addObstacle(rover.getRoverLocation());
+    	}
+
+
+    return rover;
+    }
+
+
+
+    public Rover singleCommand(Rover rover, char command) throws IllegalStateException {
+        char dir = rover.getRoverDirection();
         switch (command) {
-            case "R" -> dir = turnRight(dir);
-            case "L" -> dir = turnLeft(dir);
-            case "M" -> rover = move(rover);
+            case 'R' -> dir = turnRight(dir);
+            case 'L' -> dir = turnLeft(dir);
+            case 'M' -> rover = move(rover);
             default -> throw new IllegalStateException("Error: command invalid");
         }
 
         rover.setRoverdirection(dir);
-//todo:add rover to moved list to check collisions later
         return rover;
     }
 
@@ -73,51 +96,67 @@ public class Rover {
         return isValid;
     }
 
-    private boolean isThereAnObstacleinNextStep(Coordinates newCoordinates){
-        ArrayList<Coordinates> obstacles = new ArrayList<>();
+    private boolean isThereAnObstacleinNextStep(Coordinates newCoordinates, ArrayList <Coordinates> obstacles){
+    	boolean ret =false;
+    	//for some reason the contains method returns false despite having an obstacle at the same coordinates of "new coordimnates"
+    	/*@todo: investigate why*/
+    	/*if(obstacles.contains(newCoordinates))	System.out.println("obstacle: "+obstacles.toString());
+    	else System.out.println("no obstacle: ");
+        return obstacles.contains(newCoordinates);*/
 
-        return obstacles.contains(newCoordinates);
+    if(obstacles.size()>0) {
+    for (Coordinates obstacle : obstacles) {
+    	if(obstacle.getX()==newCoordinates.getX()&&
+    			obstacle.getY()==newCoordinates.getY())
+    		return true;
+
+    }
+    }
+    return ret;
     }
 
-    private Rover move(Rover roverMoving) {
-        String dir = roverMoving.getRoverDirection();
-        Coordinates actualCoord = roverMoving.getRoverLocation();
-        Coordinates newCoordinates = roverMoving.getRoverLocation();
+    private Rover move(Rover roverMoving) throws UnsupportedOperationException {
+        char dir = roverMoving.getRoverDirection();
+        Coordinates newCoordinates = new Coordinates( roverMoving.getRoverLocation().getX(),roverMoving.getRoverLocation().getY());
 
         switch (dir) {
-            case "N" -> newCoordinates.setY(actualCoord.getY() + 1);
-            case "W" -> newCoordinates.setX(actualCoord.getX() - 1);
-            case "S" -> newCoordinates.setY(actualCoord.getY() - 1);
-            case "E" -> newCoordinates.setX(actualCoord.getX() + 1);
-            default -> throw new UnsupportedOperationException("Error: new Coordinates not valid");
+            case 'N' -> newCoordinates.setY(newCoordinates.getY() + 1);
+            case 'W' -> newCoordinates.setX(newCoordinates.getX() - 1);
+            case 'S' -> newCoordinates.setY(newCoordinates.getY() - 1);
+            case 'E' -> newCoordinates.setX(newCoordinates.getX() + 1);
+            default -> throw new UnsupportedOperationException("Error: new Coordinates invalid");
         }
+if(isThereAnObstacleinNextStep(newCoordinates, plateau.getObstacles())) {
+	/*@todo: set current location as obstacle itslef*/
+	throw new UnsupportedOperationException("Error: there is an obstacle");
 
-        if(isThereAnObstacleinNextStep(newCoordinates)){
-            throw new UnsupportedOperationException("Error: obstacle in the way");
-        } else{
-            roverMoving.setRoverLocation(newCoordinates);
-        }
-        return roverMoving;
+}
+else {
+	roverMoving.setRoverLocation(newCoordinates);
+}
+   return roverMoving;
     }
 
-    private String turnLeft(String dir) {
+
+
+    private char  turnLeft(char dir) {
         switch (dir) {
-            case "N" -> dir = "W";
-            case "W" -> dir = "S";
-            case "S" -> dir = "E";
-            case "E" -> dir = "N";
+            case 'N' -> dir = 'W';
+            case 'W' -> dir = 'S';
+            case 'S' -> dir = 'E';
+            case 'E' -> dir = 'N';
             default -> throw new UnsupportedOperationException("Error: cant turn a way that is not NSWE");
         }
 
         return dir;
     }
 
-    private String turnRight(String dir) {
+    private char turnRight(char dir) {
         switch (dir) {
-            case "N" -> dir = "E";
-            case "E" -> dir = "S";
-            case "S" -> dir = "W";
-            case "W" -> dir = "N";
+        case 'N' -> dir = 'E';
+        case 'E' -> dir = 'S';
+        case 'S' -> dir = 'W';
+        case 'W' -> dir = 'N';
             default -> throw new UnsupportedOperationException("Error: cant turn a way that is not NSWE");
         }
         return dir;

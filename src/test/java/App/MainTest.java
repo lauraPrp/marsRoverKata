@@ -48,8 +48,8 @@ public class MainTest {
         ArrayList<Rover> testRoverList = new ArrayList<>();
         Coordinates rover1Coordinates = new Coordinates(1, 2);
         Coordinates rover2Coordinates = new Coordinates(3, 3);
-        Rover rover1 = new Rover(rover1Coordinates, "N", plateau);
-        Rover rover2 = new Rover(rover2Coordinates, "E", plateau);
+        Rover rover1 = new Rover(rover1Coordinates, 'N', plateau);
+        Rover rover2 = new Rover(rover2Coordinates, 'E', plateau);
         //todo: how test list content?
         testRoverList.add(rover1);
         testRoverList.add(rover2);
