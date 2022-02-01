@@ -6,9 +6,9 @@ public class Coordinates {
     private int x;
     private int y;
 
-    public Coordinates(int x, int y){
-        this.x=x;
-        this.y=y;
+    public Coordinates(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
 
@@ -27,9 +27,9 @@ public class Coordinates {
     public void setY(int y) {
         this.y = y;
     }
-    
+
     @Override
     public String toString() {
-        return ""+ this.x+" "+this.y;
+        return "" + this.x + " " + this.y;
     }
 }

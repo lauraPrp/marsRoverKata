@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ControllerEdgeCasesAndErrorsTest {
+
     Controller mainApp;
 
     @BeforeEach
@@ -36,8 +37,6 @@ public class ControllerEdgeCasesAndErrorsTest {
         mainApp.initAll("testInputWithObstacle.txt");
         ArrayList<Rover> roverList = mainApp.getAllRovers();
         mainApp.startOperations(roverList);
-
-
 
         assertEquals(1, roverList.get(0).getRoverLocation().getX());
         assertEquals(3, roverList.get(0).getRoverLocation().getY());
