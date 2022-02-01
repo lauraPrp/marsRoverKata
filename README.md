@@ -12,4 +12,4 @@ it is possible to simulate rovers movement running the Main class, some test cas
 3d line a sequence of character RLM R stands for RIGHT and dictate the rover to rotate right. L does the same but LEFT. M dictate the rover to move 1 grid space.
 it's possible to move several rovers in sequence, you can add them repeating 2nd and 3rd lines format for each rover. 
 save your file in the main directory and choose option 6 when running App/Main.java 
-[image](https://user-images.githubusercontent.com/69343655/152051197-825a5f84-0380-4065-9019-be5919aa1932.png)
+
