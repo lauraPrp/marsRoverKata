@@ -10,6 +10,10 @@ public class Rover {
     private final Plateau plateau;
     boolean pathCompleted;
 
+
+
+    String message="";
+
     public Plateau getPlateau() {
         return plateau;
     }
@@ -27,7 +31,8 @@ public class Rover {
         this.roverCoordinates = start;
         this.direction = direction;
         this.plateau = grid;
-        this.pathCompleted=false;
+        this.pathCompleted = false;
+        this.message=" Ready ";
     }
 
 
@@ -48,26 +53,24 @@ public class Rover {
     }
 
 
+    public Rover executeCommandList(Rover rover) throws UnsupportedOperationException {
+        char[] commandlist = rover.getMovementCommandList();
+        try {
+            for (char element : commandlist) {
+                rover = singleCommand(rover, element);
+            }
+        } catch (UnsupportedOperationException use) {
+            use.printStackTrace();
 
-    public Rover executeCommandList(Rover rover) throws UnsupportedOperationException{
-    	char[] commandlist = rover.getMovementCommandList();
-    	try {
-    	for (char element : commandlist) {
-    		rover = singleCommand(rover,element);
-    	}
-    	}catch( UnsupportedOperationException use) {
-    		use.printStackTrace();
-    		}
-    	finally {
+        } finally {
 
-    	    		rover.pathCompleted=true;
-    	    		plateau.addObstacle(rover.getRoverLocation());
-    	}
+            rover.pathCompleted = true;
+            plateau.addObstacle(rover.getRoverLocation());
+        }
 
 
-    return rover;
+        return rover;
     }
-
 
 
     public Rover singleCommand(Rover rover, char command) throws IllegalStateException {
@@ -96,28 +99,27 @@ public class Rover {
         return isValid;
     }
 
-    private boolean isThereAnObstacleinNextStep(Coordinates newCoordinates, ArrayList <Coordinates> obstacles){
-    	boolean ret =false;
-    	//for some reason the contains method returns false despite having an obstacle at the same coordinates of "new coordimnates"
-    	/*@todo: investigate why*/
+    private boolean isThereAnObstacleinNextStep(Coordinates newCoordinates, ArrayList<Coordinates> obstacles) {
+        boolean ret = false;
+        //for some reason the Arraylist.contains method returns false despite having an obstacle at the same coordinates of "new coordimnates"
+        /*@todo: investigate why*/
     	/*if(obstacles.contains(newCoordinates))	System.out.println("obstacle: "+obstacles.toString());
     	else System.out.println("no obstacle: ");
         return obstacles.contains(newCoordinates);*/
 
-    if(obstacles.size()>0) {
-    for (Coordinates obstacle : obstacles) {
-    	if(obstacle.getX()==newCoordinates.getX()&&
-    			obstacle.getY()==newCoordinates.getY())
-    		return true;
-
-    }
-    }
-    return ret;
+        if (obstacles.size() > 0) {
+            for (Coordinates obstacle : obstacles) {
+                if (obstacle.getX() == newCoordinates.getX() &&
+                        obstacle.getY() == newCoordinates.getY())
+                    return true;
+            }
+        }
+        return ret;
     }
 
     private Rover move(Rover roverMoving) throws UnsupportedOperationException {
         char dir = roverMoving.getRoverDirection();
-        Coordinates newCoordinates = new Coordinates( roverMoving.getRoverLocation().getX(),roverMoving.getRoverLocation().getY());
+        Coordinates newCoordinates = new Coordinates(roverMoving.getRoverLocation().getX(), roverMoving.getRoverLocation().getY());
 
         switch (dir) {
             case 'N' -> newCoordinates.setY(newCoordinates.getY() + 1);
@@ -126,20 +128,21 @@ public class Rover {
             case 'E' -> newCoordinates.setX(newCoordinates.getX() + 1);
             default -> throw new UnsupportedOperationException("Error: new Coordinates invalid");
         }
-if(isThereAnObstacleinNextStep(newCoordinates, plateau.getObstacles())) {
-	/*@todo: set current location as obstacle itslef*/
-	throw new UnsupportedOperationException("Error: there is an obstacle");
 
-}
-else {
-	roverMoving.setRoverLocation(newCoordinates);
-}
-   return roverMoving;
+        if (isThereAnObstacleinNextStep(newCoordinates, plateau.getObstacles())) {
+            roverMoving.setMessage(" Early stop, obstacle found. I stopped at: "+ roverMoving.getRoverLocation().getX()+","+ roverMoving.getRoverLocation().getY());
+            throw new UnsupportedOperationException("Error: there is an obstacle");
+
+        } else {
+            roverMoving.setRoverLocation(newCoordinates);
+            //roverMoving.setMessage("I am at: "+ roverMoving.getRoverLocation().getX()+","+ roverMoving.getRoverLocation().getY());
+        }
+        //System.out.println("new coord: " + newCoordinates.getX() + " " + newCoordinates.getY());
+        return roverMoving;
     }
 
 
-
-    private char  turnLeft(char dir) {
+    private char turnLeft(char dir) {
         switch (dir) {
             case 'N' -> dir = 'W';
             case 'W' -> dir = 'S';
@@ -153,14 +156,21 @@ else {
 
     private char turnRight(char dir) {
         switch (dir) {
-        case 'N' -> dir = 'E';
-        case 'E' -> dir = 'S';
-        case 'S' -> dir = 'W';
-        case 'W' -> dir = 'N';
+            case 'N' -> dir = 'E';
+            case 'E' -> dir = 'S';
+            case 'S' -> dir = 'W';
+            case 'W' -> dir = 'N';
             default -> throw new UnsupportedOperationException("Error: cant turn a way that is not NSWE");
         }
         return dir;
 
+    }
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
 }
