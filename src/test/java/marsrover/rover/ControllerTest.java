@@ -28,20 +28,16 @@ public class ControllerTest {
     }
 
     @Test
-    public void createPlateauFromInput() throws FileNotFoundException {
+    public void createPlateauFromInput()  {
         plateauGrid = mainAppController.getPlateau();
         assertEquals(5, plateauGrid.getMaxX(), "plateau x coord");
         assertEquals(5, plateauGrid.getMaxY(), "plateau y coord");
     }
 
     @Test
-    public void createListOfRoversFromInput() throws FileNotFoundException {
+    public void createListOfRoversFromInput() {
 
-       // mainAppController.initAll("testInput.txt");
-       // plateauGrid = mainAppController.getPlateau();
         ArrayList<Rover> roverList = mainAppController.getAllRovers();
-
-
 
         Coordinates rover1Coordinates = new Coordinates(1, 2);
         Coordinates rover2Coordinates = new Coordinates(3, 3);
@@ -53,7 +49,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void moveToCorrectSpots() throws FileNotFoundException {
+    public void moveToCorrectSpots() {
 
         ArrayList<Rover> roverList = mainAppController.getAllRovers();
 
@@ -76,14 +72,19 @@ public class ControllerTest {
         Controller mainAppController = Controller.getControllerInstance();
         mainAppController.getRoverCount();
 
-        assertEquals(2, mainAppController.getRoverCount(), "rover count");
+        assertEquals(3, mainAppController.getRoverCount(), "rover count");
     }
 
     @Test
-    public void wrongFileInputCommands() throws FileNotFoundException {
+    public void wrongFileInputCommands() {
         Controller mainApp = Controller.getControllerInstance();
         assertThrows(FileNotFoundException.class, () -> mainApp.initAll("fileNotPresent.txt"));
     }
 
-    //todo: add exceptions in case the file format is not how foreseen?
+    @Test
+    public void wrongFileInvalidRoverPosition()  {
+        Controller mainApp = Controller.getControllerInstance();
+        assertThrows(NumberFormatException.class, () ->
+                mainApp.initAll("testInputWrongFormat.txt"),"input invalid, check format");
+    }
 }

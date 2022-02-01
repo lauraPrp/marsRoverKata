@@ -10,9 +10,7 @@ public class Rover {
     private final Plateau plateau;
     boolean pathCompleted;
 
-
-
-    String message="";
+    String message;
 
     public Plateau getPlateau() {
         return plateau;
@@ -32,7 +30,7 @@ public class Rover {
         this.direction = direction;
         this.plateau = grid;
         this.pathCompleted = false;
-        this.message=" Ready ";
+        this.message=" ";
     }
 
 
@@ -55,16 +53,22 @@ public class Rover {
 
     public Rover executeCommandList(Rover rover) throws UnsupportedOperationException {
         char[] commandlist = rover.getMovementCommandList();
+        message=message.concat(
+        "I start at: "+rover.getRoverLocation().getX()+"," +
+                getRoverLocation().getY());
         try {
             for (char element : commandlist) {
                 rover = singleCommand(rover, element);
             }
+            message=message.concat("  I stopped at:"+rover.getRoverLocation().getX()+"," +
+                    getRoverLocation().getY());
         } catch (UnsupportedOperationException use) {
-            use.printStackTrace();
+            //use.printStackTrace();
 
         } finally {
 
             rover.pathCompleted = true;
+            rover.setMessage(message);
             plateau.addObstacle(rover.getRoverLocation());
         }
 
@@ -130,12 +134,12 @@ public class Rover {
         }
 
         if (isThereAnObstacleinNextStep(newCoordinates, plateau.getObstacles())) {
-            roverMoving.setMessage(" Early stop, obstacle found. I stopped at: "+ roverMoving.getRoverLocation().getX()+","+ roverMoving.getRoverLocation().getY());
+            roverMoving.setMessage(message+=" Early stop, obstacle found. I stopped at: "+ roverMoving.getRoverLocation().getX()+","+ roverMoving.getRoverLocation().getY());
             throw new UnsupportedOperationException("Error: there is an obstacle");
 
         } else {
             roverMoving.setRoverLocation(newCoordinates);
-            //roverMoving.setMessage("I am at: "+ roverMoving.getRoverLocation().getX()+","+ roverMoving.getRoverLocation().getY());
+            //roverMoving.setMessage(message+=" I am at: "+ roverMoving.getRoverLocation().getX()+","+ roverMoving.getRoverLocation().getY());
         }
         //System.out.println("new coord: " + newCoordinates.getX() + " " + newCoordinates.getY());
         return roverMoving;

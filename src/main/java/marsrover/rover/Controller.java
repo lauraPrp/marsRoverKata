@@ -57,7 +57,7 @@ public class Controller {
     }
 
     private boolean validateInputFileData(ArrayList<String> inputToValidate) {
-      //6 is the minimum number of data : 2 numbers Plateau,2 numbers and a char for the rover and a String for commands
+        //6 is the minimum number of data : 2 numbers Plateau,2 numbers and a char for the rover and a String for commands
         return inputToValidate.size() >= 6;
 
 
@@ -76,18 +76,18 @@ public class Controller {
     private ArrayList<Rover> initRovers() {
         Plateau grid = getPlateau();
         allRovers = new ArrayList<>();
+            for (int i = 2; i < input.size(); i += 4) {
 
-        for (int i = 2; i < input.size(); i += 4) {
+                Rover roverToList = new Rover(
+                        new Coordinates(Integer.parseInt(input.get(i)), Integer.parseInt(input.get(i + 1))),
+                        input.get(i + 2).charAt(0),
+                        grid);
 
-            Rover roverToList = new Rover(
-                    new Coordinates(Integer.parseInt(input.get(i)), Integer.parseInt(input.get(i + 1))),
-                    input.get(i + 2).charAt(0),
-                    grid);
-
-            roverToList.setMovementCommandList(input.get(i + 3).toCharArray());
-            allRovers.add(roverToList);
-        }
+                roverToList.setMovementCommandList(input.get(i + 3).toCharArray());
+                allRovers.add(roverToList);
+            }
         roverCount = allRovers.size();
+
         return allRovers;
     }
 
