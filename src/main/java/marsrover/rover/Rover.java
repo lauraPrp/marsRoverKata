@@ -7,14 +7,21 @@ public class Rover {
     private Coordinates roverCoordinates;
     private char direction;
     private char[] movementCommandList;
-    private final Plateau plateau;
     boolean pathCompleted;
+
+   /* private Plateau getPlateau() {
+        return plateau;
+    }
+
+    private void setPlateau(Plateau plateau) {
+        this.plateau = plateau;
+    }*/
+
+    //private Plateau plateau;
 
     String message;
 
-    public Plateau getPlateau() {
-        return plateau;
-    }
+
 
     public char[] getMovementCommandList() {
         return movementCommandList;
@@ -25,12 +32,11 @@ public class Rover {
     }
 
 
-    public Rover(Coordinates start, char direction, Plateau grid) {
+    public Rover(Coordinates start, char direction) {
         this.roverCoordinates = start;
         this.direction = direction;
-        this.plateau = grid;
         this.pathCompleted = false;
-        this.message=" ";
+        this.message = " ";
     }
 
 
@@ -51,47 +57,39 @@ public class Rover {
     }
 
 
-    public Rover executeCommandList(Rover rover) throws UnsupportedOperationException {
-        char[] commandlist = rover.getMovementCommandList();
-        message=message.concat(
-        "I start at: "+rover.getRoverLocation().getX()+"," +
-                getRoverLocation().getY());
+    public void executeCommandList(Plateau plateau)  {
+      //  Rover rover = this;
+
+        char[] commandlist = this.getMovementCommandList();
+
         try {
             for (char element : commandlist) {
-                rover = singleCommand(rover, element);
+               singleCommand( element, plateau);
             }
-            message=message.concat("  I stopped at:"+rover.getRoverLocation().getX()+"," +
-                    getRoverLocation().getY());
+
         } catch (UnsupportedOperationException use) {
-            //use.printStackTrace();
 
-        } finally {
-
-            rover.pathCompleted = true;
-            rover.setMessage(message);
-            plateau.addObstacle(rover.getRoverLocation());
         }
+    }
 
-
-        return rover;
+    public void singleCommand( char command, Plateau plateau) {
+        char dir = this.getRoverDirection();
+      try{
+          switch (command) {
+              case 'R' -> dir = turnRight(dir);
+              case 'L' -> dir = turnLeft(dir);
+              case 'M' -> move(plateau);
+              default -> throw new UnsupportedOperationException();
+          }
+      }catch(UnsupportedOperationException ise){
+        // this.setMessage(this.getMessage().concat(" invalid movement "));
+          throw new UnsupportedOperationException();
+      }
+        this.setRoverdirection(dir);
     }
 
 
-    public Rover singleCommand(Rover rover, char command) throws IllegalStateException {
-        char dir = rover.getRoverDirection();
-        switch (command) {
-            case 'R' -> dir = turnRight(dir);
-            case 'L' -> dir = turnLeft(dir);
-            case 'M' -> rover = move(rover);
-            default -> throw new IllegalStateException("Error: command invalid");
-        }
-
-        rover.setRoverdirection(dir);
-        return rover;
-    }
-
-
-    public boolean isMovementValid(Coordinates targetPlace, Plateau grid) {
+    private boolean isMovementValid(Coordinates targetPlace, Plateau grid) {
         boolean isValid = true;
         if (targetPlace.getX() < 0
                 || targetPlace.getY() < 0
@@ -121,9 +119,9 @@ public class Rover {
         return ret;
     }
 
-    private Rover move(Rover roverMoving) throws UnsupportedOperationException {
-        char dir = roverMoving.getRoverDirection();
-        Coordinates newCoordinates = new Coordinates(roverMoving.getRoverLocation().getX(), roverMoving.getRoverLocation().getY());
+    private void move( Plateau plateau) throws UnsupportedOperationException {
+        char dir = this.getRoverDirection();
+        Coordinates newCoordinates = new Coordinates(this.getRoverLocation().getX(), this.getRoverLocation().getY());
 
         switch (dir) {
             case 'N' -> newCoordinates.setY(newCoordinates.getY() + 1);
@@ -132,17 +130,18 @@ public class Rover {
             case 'E' -> newCoordinates.setX(newCoordinates.getX() + 1);
             default -> throw new UnsupportedOperationException("Error: new Coordinates invalid");
         }
+        if (isMovementValid(newCoordinates, plateau)) {
+            if (isThereAnObstacleinNextStep(newCoordinates, plateau.getObstacles())) {
+                this.setMessage(message += " Early stop, obstacle found. ");
+                throw new UnsupportedOperationException("Error: there is an obstacle");
 
-        if (isThereAnObstacleinNextStep(newCoordinates, plateau.getObstacles())) {
-            roverMoving.setMessage(message+=" Early stop, obstacle found. I stopped at: "+ roverMoving.getRoverLocation().getX()+","+ roverMoving.getRoverLocation().getY());
-            throw new UnsupportedOperationException("Error: there is an obstacle");
-
-        } else {
-            roverMoving.setRoverLocation(newCoordinates);
-            //roverMoving.setMessage(message+=" I am at: "+ roverMoving.getRoverLocation().getX()+","+ roverMoving.getRoverLocation().getY());
+            } else {
+                this.setRoverLocation(newCoordinates);
+            }
+        }else{
+            this.setMessage(message += " Error: Rover out of plateau range: " );
+            throw new UnsupportedOperationException("Error: Rover out of plateau range");
         }
-        //System.out.println("new coord: " + newCoordinates.getX() + " " + newCoordinates.getY());
-        return roverMoving;
     }
 
 
@@ -169,6 +168,7 @@ public class Rover {
         return dir;
 
     }
+
     public String getMessage() {
         return message;
     }

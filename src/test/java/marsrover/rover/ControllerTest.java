@@ -28,7 +28,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void createPlateauFromInput()  {
+    public void createPlateauFromInput() {
         plateauGrid = mainAppController.getPlateau();
         assertEquals(5, plateauGrid.getMaxX(), "plateau x coord");
         assertEquals(5, plateauGrid.getMaxY(), "plateau y coord");
@@ -41,11 +41,34 @@ public class ControllerTest {
 
         Coordinates rover1Coordinates = new Coordinates(1, 2);
         Coordinates rover2Coordinates = new Coordinates(3, 3);
-        Rover rover1 = new Rover(rover1Coordinates, 'N', plateauGrid);
-        Rover rover2 = new Rover(rover2Coordinates, 'E', plateauGrid);
 
+     /*   Rover rover1 = new Rover(rover1Coordinates, 'N', plateauGrid);
+        Rover rover2 = new Rover(rover2Coordinates, 'E', plateauGrid);
+*/
+        Rover rover1 = new Rover(rover1Coordinates, 'N');
+        Rover rover2 = new Rover(rover2Coordinates, 'E');
         assertInstanceOf(rover1.getClass(), roverList.get(0));
         assertInstanceOf(rover2.getClass(), roverList.get(1));
+    }
+
+    @Test
+    public void startOperations() {
+        mainAppController.startOperations(allRovers);
+        ArrayList<Rover> roverList = mainAppController.getAllRovers();
+
+        Coordinates rover1CoordinatesExpected = new Coordinates(1, 3);
+        Coordinates rover2CoordinatesExpected = new Coordinates(3, 3);
+
+        Rover rover1 = new Rover(rover1CoordinatesExpected, 'N');
+        Rover rover2 = new Rover(rover2CoordinatesExpected, 'E');
+
+        assertEquals(1, roverList.get(0).getRoverLocation().getX());
+        assertEquals(3, roverList.get(0).getRoverLocation().getY());
+
+        assertEquals(5, roverList.get(1).getRoverLocation().getX());
+        assertEquals(1, roverList.get(1).getRoverLocation().getY());
+
+
     }
 
     @Test
@@ -55,8 +78,8 @@ public class ControllerTest {
 
         Coordinates rover1CoordinatesExpected = new Coordinates(1, 2);
         Coordinates rover2CoordinatesExpected = new Coordinates(3, 3);
-        Rover rover1 = new Rover(rover1CoordinatesExpected, 'N', plateauGrid);
-        Rover rover2 = new Rover(rover2CoordinatesExpected, 'E', plateauGrid);
+        Rover rover1 = new Rover(rover1CoordinatesExpected, 'N');
+        Rover rover2 = new Rover(rover2CoordinatesExpected, 'E');
 
         assertEquals(rover1.getRoverLocation().getX(), roverList.get(0).getRoverLocation().getX());
         assertEquals(rover1.getRoverLocation().getY(), roverList.get(0).getRoverLocation().getY());
@@ -69,22 +92,8 @@ public class ControllerTest {
 
     @Test
     public void countRovers() {
-        Controller mainAppController = Controller.getControllerInstance();
-        mainAppController.getRoverCount();
-
-        assertEquals(3, mainAppController.getRoverCount(), "rover count");
+        assertEquals(2, mainAppController.getRoverCount(), "rover count");
     }
 
-    @Test
-    public void wrongFileInputCommands() {
-        Controller mainApp = Controller.getControllerInstance();
-        assertThrows(FileNotFoundException.class, () -> mainApp.initAll("fileNotPresent.txt"));
-    }
 
-    @Test
-    public void wrongFileInvalidRoverPosition()  {
-        Controller mainApp = Controller.getControllerInstance();
-        assertThrows(NumberFormatException.class, () ->
-                mainApp.initAll("testInputWrongFormat.txt"),"input invalid, check format");
-    }
 }
