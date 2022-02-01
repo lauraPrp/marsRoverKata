@@ -5,5 +5,5 @@ import static org.mockito.Mockito.*;
 
 
 public class MainTest {
-    private Mock mk;
+    /*not in use ATM*/
 }
