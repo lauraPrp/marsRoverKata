@@ -30,7 +30,6 @@ public class Plateau {
         obstacles.add(obstaclesCoord);
     }
 
-
     @Override
     public String toString() {
         return "Grid{}" + maxX + " " + maxY;

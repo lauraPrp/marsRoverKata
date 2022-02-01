@@ -21,15 +21,15 @@ public class Main {
         System.out.println("Enter 4 to test the case which have obstacles ");
         System.out.println("Enter 5 to test the case which have wrong coordinates for the rover at start ");
         System.out.println("Use a custom test file entering the file name(txt format)");
-        String inputTestFromConsole=in.nextLine();
-         inputTestFromConsole  = switch (inputTestFromConsole) {
+        String inputTestFromConsole = in.nextLine();
+        inputTestFromConsole = switch (inputTestFromConsole) {
 
-            case "1" -> "testInput.txt" ;
+            case "1" -> "testInput.txt";
             case "2" -> "testInputInvalidMovementCmd.txt";
             case "3" -> "testInputOutOfRange.txt";
             case "4" -> "testInputWithObstacle.txt";
             case "5" -> "testInputWrongFormat.txt";
-            default -> "testInput.txt" ;
+            default -> "testInput.txt";
 
         };
 

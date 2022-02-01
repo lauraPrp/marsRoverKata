@@ -22,7 +22,6 @@ public class Rover {
     String message;
 
 
-
     public char[] getMovementCommandList() {
         return movementCommandList;
     }
@@ -57,34 +56,31 @@ public class Rover {
     }
 
 
-    public void executeCommandList(Plateau plateau)  {
-      //  Rover rover = this;
-
+    public void executeCommandList(Plateau plateau) {
         char[] commandlist = this.getMovementCommandList();
-
         try {
             for (char element : commandlist) {
-               singleCommand( element, plateau);
+                singleCommand(element, plateau);
             }
-
         } catch (UnsupportedOperationException use) {
+            //this exception stops here cause I logged the invalid movement/command in the rover message
+            //so it's traced, but I wanted to be able to test it in unit tests
 
         }
     }
 
-    public void singleCommand( char command, Plateau plateau) {
+    public void singleCommand(char command, Plateau plateau) {
         char dir = this.getRoverDirection();
-      try{
-          switch (command) {
-              case 'R' -> dir = turnRight(dir);
-              case 'L' -> dir = turnLeft(dir);
-              case 'M' -> move(plateau);
-              default -> throw new UnsupportedOperationException();
-          }
-      }catch(UnsupportedOperationException ise){
-        // this.setMessage(this.getMessage().concat(" invalid movement "));
-          throw new UnsupportedOperationException();
-      }
+        try {
+            switch (command) {
+                case 'R' -> dir = turnRight(dir);
+                case 'L' -> dir = turnLeft(dir);
+                case 'M' -> move(plateau);
+                default -> throw new UnsupportedOperationException();
+            }
+        } catch (UnsupportedOperationException ise) {
+            throw new UnsupportedOperationException();
+        }
         this.setRoverdirection(dir);
     }
 
@@ -119,7 +115,7 @@ public class Rover {
         return ret;
     }
 
-    private void move( Plateau plateau) throws UnsupportedOperationException {
+    private void move(Plateau plateau) throws UnsupportedOperationException {
         char dir = this.getRoverDirection();
         Coordinates newCoordinates = new Coordinates(this.getRoverLocation().getX(), this.getRoverLocation().getY());
 
@@ -130,6 +126,7 @@ public class Rover {
             case 'E' -> newCoordinates.setX(newCoordinates.getX() + 1);
             default -> throw new UnsupportedOperationException("Error: new Coordinates invalid");
         }
+        //errors to be logged in the object: obstacles and coordinates out of Plateau
         if (isMovementValid(newCoordinates, plateau)) {
             if (isThereAnObstacleinNextStep(newCoordinates, plateau.getObstacles())) {
                 this.setMessage(message += " Early stop, obstacle found. ");
@@ -138,8 +135,8 @@ public class Rover {
             } else {
                 this.setRoverLocation(newCoordinates);
             }
-        }else{
-            this.setMessage(message += " Error: Rover out of plateau range: " );
+        } else {
+            this.setMessage(message += " Error: Rover out of plateau range: ");
             throw new UnsupportedOperationException("Error: Rover out of plateau range");
         }
     }
