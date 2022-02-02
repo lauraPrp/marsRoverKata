@@ -9,18 +9,7 @@ public class Rover {
     private char[] movementCommandList;
     boolean pathCompleted;
 
-   /* private Plateau getPlateau() {
-        return plateau;
-    }
-
-    private void setPlateau(Plateau plateau) {
-        this.plateau = plateau;
-    }*/
-
-    //private Plateau plateau;
-
     String message;
-
 
     public char[] getMovementCommandList() {
         return movementCommandList;
@@ -30,14 +19,12 @@ public class Rover {
         this.movementCommandList = movementCommandList;
     }
 
-
     public Rover(Coordinates start, char direction) {
         this.roverCoordinates = start;
         this.direction = direction;
         this.pathCompleted = false;
         this.message = " ";
     }
-
 
     public Coordinates getRoverLocation() {
         return roverCoordinates;
@@ -173,7 +160,6 @@ public class Rover {
     public void setMessage(String message) {
         this.message = message;
     }
-
 }
 
 
