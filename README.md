@@ -6,7 +6,7 @@ Program to simulate rovers movement around the surface of Mars
 
 To start the simulation run the App/Main.java class running the Main class, some test cases are already available,
 using number 1-5  you can see in the console output where they move.
-✨
+✨***TEST CASES FROM MAIN APP***
 ```sh
 1- Simulate 2 rovers moving, no errors
 2- contains invalid commands
@@ -15,7 +15,7 @@ using number 1-5  you can see in the console output where they move.
 5- shows the behaviour of the program when the starting point is not valid
 6- you can use your *custom file*!  digit or copy and paste the fileName.txt having the following format:
 ```
-✨
+✨***CUSTOM COMMAND FILE FORMAT***
 ```sh
 1st line: 2 integer numbers separated by a space
  they set the max x y coordinates of the plateau, where rovers are allowed to move
@@ -30,4 +30,10 @@ using number 1-5  you can see in the console output where they move.
 it's possible to move several rovers in sequence, you can add them repeating 2nd and 3rd lines format for each rover.
 save your file in the main directory and choose option 6 when running App/Main.java
 
-
+✨***ASSUMPTIONS***
+```sh
+the rovers wont move out the plateau, they will give their last position and ignore further commands
+if a rover encounters another rover it will stop and give the last position and an error message
+if a rover is supposed to start from a point where another rover is standing, it will move to a next available point,
+ give the point coordinates and wont move further
+```
