@@ -23,14 +23,14 @@ public class Controller {
             synchronized (Controller.class) {
                 if (controllerInstance == null)
                     controllerInstance = new Controller();
-           }
+            }
         return controllerInstance;
     }
 
     public void initAll(String file) throws FileNotFoundException {
         input = getInputFromFile(file);
         initPlateau();
-       allRovers= initRovers();
+        allRovers = initRovers();
     }
 
     private ArrayList<String> getInputFromFile(String filename) throws FileNotFoundException, NoSuchElementException {
@@ -76,17 +76,17 @@ public class Controller {
         allRovers = new ArrayList<>();
         Rover roverToList;
         for (int i = 2; i < input.size(); i += 4) {
-try {
-    roverToList = new Rover(
-            new Coordinates(Integer.parseInt(input.get(i)), Integer.parseInt(input.get(i + 1))),
-            input.get(i + 2).charAt(0));
+            try {
+                roverToList = new Rover(
+                        new Coordinates(Integer.parseInt(input.get(i)), Integer.parseInt(input.get(i + 1))),
+                        input.get(i + 2).charAt(0));
 
-    roverToList.setMovementCommandList(input.get(i + 3).toCharArray());
-    allRovers.add(roverToList);
-}catch(NumberFormatException nfe){
-    System.out.println(" check rovers position " );
-    throw new NumberFormatException("");
-}
+                roverToList.setMovementCommandList(input.get(i + 3).toCharArray());
+                allRovers.add(roverToList);
+            } catch (NumberFormatException nfe) {
+                System.out.println(" check rovers position ");
+                throw new NumberFormatException("");
+            }
         }
         roverCount = allRovers.size();
 
@@ -108,9 +108,9 @@ try {
                 plateau.addObstacle(singleRover.getRoverLocation());
                 System.out.println("  " + singleRover.getMessage());
             }
-        }catch(NullPointerException npe){
+        } catch (NullPointerException npe) {
             System.out.println("Something went VERY WRONG. Operation Aborted. NASA wont hire me :( ");
         }
     }
-    }
+}
 

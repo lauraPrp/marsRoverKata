@@ -15,39 +15,46 @@ public class RoverTest {
     Rover rover ;
 
     @BeforeEach
-    public void setUp(){
-         grid = new Plateau(10, 10);
-         rover = new Rover(new Coordinates(0, 0), 'N');
+    public void setUp() {
+        /*arrange*/
+        grid = new Plateau(10, 10);
+        rover = new Rover(new Coordinates(0, 0), 'N');
     }
+
     @Test
-    public void roverCommandTurnRightAndLeftAllPossibleCombinations()  {
+    public void roverCommandTurnRightAndLeftAllPossibleCombinations() {
 
-        assertThrows(UnsupportedOperationException.class, () -> rover.singleCommand( 'X',grid));
-
-        rover.singleCommand( 'R',grid);
+        /* sequential acts/asserts */
+        rover.singleCommand('R', grid);
         assertEquals('E', rover.getRoverDirection(), "turn right");
-        rover.singleCommand( 'R',grid);
+        rover.singleCommand('R', grid);
         assertEquals('S', rover.getRoverDirection(), "turn right");
-        rover.singleCommand( 'R',grid);
+        rover.singleCommand('R', grid);
         assertEquals('W', rover.getRoverDirection(), "turn right");
-        rover.singleCommand( 'R',grid);
+        rover.singleCommand('R', grid);
         assertEquals('N', rover.getRoverDirection(), "turn right");
-        rover.singleCommand( 'L',grid);
+        rover.singleCommand('L', grid);
         assertEquals('W', rover.getRoverDirection(), "turn left");
-        rover.singleCommand( 'L',grid);
+        rover.singleCommand('L', grid);
         assertEquals('S', rover.getRoverDirection(), "turn left");
-        rover.singleCommand( 'L',grid);
+        rover.singleCommand('L', grid);
         assertEquals('E', rover.getRoverDirection(), "turn left");
-        rover.singleCommand( 'L',grid);
+        rover.singleCommand('L', grid);
         assertEquals('N', rover.getRoverDirection(), "turn left");
+
+        //assert
+        assertThrows(UnsupportedOperationException.class, () -> rover.singleCommand('X', grid));
+
     }
 
     @Test
     public void roverRealPassingTestCaseExampleGiven1() throws IllegalStateException {
+        /* act */
         rover.setRoverLocation(new Coordinates(1, 2));
         rover.setMovementCommandList("LMLMLMLMM".toCharArray());
         rover.executeCommandList(grid);
 
+        /* assert */
         assertEquals(1, rover.getRoverLocation().getX());
         assertEquals(3, rover.getRoverLocation().getY());
         assertEquals('N', rover.getRoverDirection());
@@ -56,10 +63,12 @@ public class RoverTest {
 
     @Test
     public void roverRealPassingTestCaseExampleGiven2() throws IllegalStateException {
+        /* act */
         rover.setRoverLocation(new Coordinates(3, 3));
         rover.setRoverdirection('E');
         rover.setMovementCommandList("MMRMMRMRRM".toCharArray());
         rover.executeCommandList(grid);
+        /* assert */
         assertEquals(5, rover.getRoverLocation().getX());
         assertEquals(1, rover.getRoverLocation().getY());
         assertEquals('E', rover.getRoverDirection());
@@ -67,7 +76,7 @@ public class RoverTest {
 
     @Test
     public void invalidCommandInput() throws IllegalStateException {
-        assertThrows(UnsupportedOperationException.class, () -> rover.singleCommand( 'X',grid));
+        assertThrows(UnsupportedOperationException.class, () -> rover.singleCommand('X', grid));
     }
 
     @Test
@@ -78,14 +87,6 @@ public class RoverTest {
         grid.addObstacle(new Coordinates(1, 3));
         rover.setMovementCommandList("MMM".toCharArray());
         rover.executeCommandList(grid);
-       /* UnsupportedOperationException expectedException = Assertions.assertThrows(
-                UnsupportedOperationException.class, () -> { rover.singleCommand(rover,'M'); });
-
-        Assertions.assertEquals("Error: there is an obstacle", expectedException.getMessage());
-        assertEquals(1, rover.getRoverLocation().getX());
-        assertEquals(2, rover.getRoverLocation().getY());
-
-   */
         UnsupportedOperationException exception = assertThrows(UnsupportedOperationException.class, () -> {
             throw new UnsupportedOperationException("Error: there is an obstacle");
         });
@@ -109,13 +110,13 @@ public class RoverTest {
 
     @Test
     void invalidCommandOutOfPlateau() {
-
+        /* act */
         rover.setRoverLocation(new Coordinates(1, 2));
         rover.setRoverdirection('N');
         grid.addObstacle(new Coordinates(1, 3));
         rover.setMovementCommandList("MMMPGT".toCharArray());
         rover.executeCommandList(grid);
-
+        /* assert */
         IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
             throw new IllegalStateException("Error: Rover out of plateau range");
         });
