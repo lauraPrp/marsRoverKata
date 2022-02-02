@@ -33,8 +33,19 @@ save your file in the main directory and choose option 6 when running App/Main.j
 
 ✨***ASSUMPTIONS***
 ```sh
+the plateau shape is rectangular/square
 the rovers wont move out the plateau, they will give their last position and ignore further commands
 if a rover encounters another rover it will stop and give the last position and an error message
 if a rover is supposed to start from a point where another rover is standing, it will move to a next available point,
  give the point coordinates and wont move further
 ```
+✨***possible further implementation:***
+```sh
+-save rovers position in an text file
+-load a graphical map to show rover position an movements
+-list the possible movements and ask to confirm the path before actually moving the rover, instead of moving it step by step
+-consider different plateau shapes
+-consider the whole planet surface and allow the rover to navigate it restarting from coordinates 0,0 
+ instead of stopping when the plateau border is reached
+ ```
+
