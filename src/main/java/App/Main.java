@@ -24,12 +24,12 @@ public class Main {
         String file =in.nextLine();
         String inputTestFromConsole = switch (file) {
 
-            case "1" -> "testInput.txt";
-            case "2" -> "testInputInvalidMovementCmd.txt";
-            case "3" -> "testInputOutOfRange.txt";
-            case "4" -> "testInputWithObstacle.txt";
-            case "5" -> "testInputWrongFormat.txt";
-            case "6" -> in.nextLine();
+            case "1" -> "autotests/testInput.txt";
+            case "2" -> "autotests/testInputInvalidMovementCmd.txt";
+            case "3" -> "autotests/testInputOutOfRange.txt";
+            case "4" -> "autotests/estInputWithObstacle.txt";
+            case "5" -> "autotests/testInputWrongFormat.txt";
+            case "6" -> "autotests/custom.txt";
             default -> "";
 
         };
@@ -50,5 +50,6 @@ public class Main {
             System.out.println("Something went VERY WRONG. Operation Aborted. NASA wont hire me :( ");
         }
     }
+
 
 }

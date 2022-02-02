@@ -14,7 +14,8 @@ using number 1-5  you can see in the console output where they move.
 3- cointains invalid commands that send the rover out of the plateau
 4- shows the behaviour of the rover when it meets an obstacle on its way
 5- shows the behaviour of the program when the starting point is not valid
-6- you can use your *custom file*!  digit or copy and paste the fileName.txt having the following format:
+6- you can personalize *custom file*!  copy/paste your tests in the file autotest/custom.txt 
+  
 ```
 ✨***CUSTOM COMMAND FILE FORMAT***
 ```sh
