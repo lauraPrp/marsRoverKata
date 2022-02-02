@@ -7,7 +7,7 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Controller {
-    private static Controller controllerInstance = null;
+    private static volatile Controller controllerInstance = null;
     private ArrayList<String> input;
     private Plateau plateau;
     private int roverCount;
@@ -57,11 +57,12 @@ public class Controller {
     }
 
     private boolean validateInputFileData(ArrayList<String> inputToValidate) {
+        //@todo:this control should be done with a regular expression before loading the data in the array of strings!!
         //6 is the minimum number of data : 2 numbers Plateau,2 numbers and a char for the rover and a String for commands
-        return inputToValidate.size() >= 6;
-
-
-    }
+        return ((inputToValidate.size() == 6)||
+                (inputToValidate.size() > 6)
+                        && (inputToValidate.size()-6)% 4 == 0);
+            }
 
     private void initPlateau() {
         plateau = new Plateau(Integer.parseInt(input.get(0)), Integer.parseInt(input.get(1)));
