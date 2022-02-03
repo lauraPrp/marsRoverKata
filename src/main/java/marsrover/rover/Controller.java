@@ -107,8 +107,7 @@ public class Controller {
             }
         } catch (NullPointerException npe) {
             System.out.println("ERROR: Something went VERY WRONG. Operation Aborted. NASA wont hire me :( ");
-        }
-        catch (UnsupportedOperationException uoe) {
+        } catch (UnsupportedOperationException uoe) {
             System.out.println("ERROR: Something went VERY WRONG. Operation Aborted. NASA wont hire me :( ");
         }
     }

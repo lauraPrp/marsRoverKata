@@ -1,11 +1,10 @@
 package marsrover.rover;
 
 
-public class Rover {
+public class Rover extends Vehicle {
     private Coordinates roverCoordinates;
     private char direction;
     private char[] movementCommandList;
-    boolean pathCompleted;
 
     String message;
 
@@ -20,7 +19,6 @@ public class Rover {
     public Rover(Coordinates start, char direction) {
         this.roverCoordinates = start;
         this.direction = direction;
-        this.pathCompleted = false;
         this.message = " ";
     }
 
@@ -47,19 +45,16 @@ public class Rover {
             for (char element : commandList) {
                 singleCommand(element, plateau);
             }
-        }
-        catch(OutOfPlateauBoundaryException use) {
+        } catch (OutOfPlateauBoundaryException use) {
             throw new UnsupportedOperationException("Rover out of plateau range");
-        }
-        catch (UnsupportedOperationException uoe ) {
+        } catch (UnsupportedOperationException uoe) {
             throw new UnsupportedOperationException("error executing command");
-        }
-                catch (IllegalArgumentException iae ) {
+        } catch (IllegalArgumentException iae) {
             throw new IllegalArgumentException("command not valid");
         }
     }
 
-    public void singleCommand(char command, Plateau plateau) throws OutOfPlateauBoundaryException,IllegalArgumentException {
+    public void singleCommand(char command, Plateau plateau) throws OutOfPlateauBoundaryException, IllegalArgumentException {
         char dir = this.getRoverDirection();
         try {
             switch (command) {
@@ -68,26 +63,21 @@ public class Rover {
                 case 'M' -> move(plateau);
                 default -> throw new IllegalArgumentException();
             }
-        }
-          catch (OutOfPlateauBoundaryException oobpe) {
-          //    this.setMessage(message += " Rover out of plateau range ");
+        } catch (OutOfPlateauBoundaryException oobpe) {
+            //    this.setMessage(message += " Rover out of plateau range ");
             throw new OutOfPlateauBoundaryException(" commands error,Rover out of plateau range ");
-        }
-        catch (UnsupportedOperationException uoe) {
+        } catch (UnsupportedOperationException uoe) {
             this.setMessage(message += " error during movement ");
             throw new UnsupportedOperationException("error during movement");
-        }
-        catch (IllegalArgumentException iae){
+        } catch (IllegalArgumentException iae) {
             throw new IllegalArgumentException("command not valid");
 
         }
         this.setRoverDirection(dir);
     }
 
-
-
-
-    private void move(Plateau plateau) throws OutOfPlateauBoundaryException,UnsupportedOperationException {
+@Override
+    public void move(Plateau plateau) throws OutOfPlateauBoundaryException, UnsupportedOperationException {
 
         char dir = this.getRoverDirection();
 
@@ -113,8 +103,8 @@ public class Rover {
         }
     }
 
-
-    private char turnLeft(char dir) {
+    @Override
+    public char turnLeft(char dir) {
         switch (dir) {
             case 'N' -> dir = 'W';
             case 'W' -> dir = 'S';
@@ -125,8 +115,8 @@ public class Rover {
 
         return dir;
     }
-
-    private char turnRight(char dir) {
+    @Override
+    public char turnRight(char dir) {
         switch (dir) {
             case 'N' -> dir = 'E';
             case 'E' -> dir = 'S';
@@ -145,6 +135,7 @@ public class Rover {
     public void setMessage(String message) {
         this.message = message;
     }
-}
+
+   }
 
 
