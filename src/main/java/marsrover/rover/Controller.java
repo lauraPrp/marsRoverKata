@@ -2,20 +2,22 @@ package marsrover.rover;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Stream;
 
 public class Controller {
     private static volatile Controller controllerInstance = null;
-    private ArrayList<String> input;
+    private ArrayList<String> input = new ArrayList<>();
     private Plateau plateau;
     private int roverCount;
 
     private ArrayList<Rover> allRovers;
 
-    private Controller() {
-        input = new ArrayList<>();
-    }
+    private Controller() { }
 
     public static Controller getControllerInstance() {
         if (controllerInstance == null)
@@ -24,6 +26,10 @@ public class Controller {
                     controllerInstance = new Controller();
             }
         return controllerInstance;
+    }
+
+    private static <T> Stream<T> convertListToStream(List<T> list) {
+        return list.stream();
     }
 
     public void initAll(String file) throws FileNotFoundException {
@@ -109,6 +115,35 @@ public class Controller {
             System.out.println("ERROR: Something went VERY WRONG. Operation Aborted. NASA wont hire me :( ");
         } catch (UnsupportedOperationException uoe) {
             System.out.println("ERROR: Something went VERY WRONG. Operation Aborted. NASA wont hire me :( ");
+        }
+    }
+
+    public void saveFinalReport() {
+        File reportFile = new File("report.txt");
+        FileWriter myWriter = null;
+        StringBuilder sb = new StringBuilder();
+        try {
+            ArrayList<Coordinates> roverReport = plateau.getObstacles();
+            for (Coordinates roverCoordinates : roverReport)
+                if (reportFile.createNewFile()) {
+                    System.out.println("File created: " + reportFile.getName());
+                    myWriter = new FileWriter(reportFile);
+                    sb.append("Rover report: \n ");
+                } else {
+                    myWriter = new FileWriter(reportFile, true);
+                }
+
+            Stream<Coordinates> streamList = convertListToStream(roverReport);
+
+            streamList.forEach(coordinates -> sb.append("" + coordinates.toString()).append(" \n "));
+            String reportContent = sb.toString();
+            myWriter.write(reportContent);
+            myWriter.close();
+            System.out.println("Successfully wrote the report for this mission." + reportContent + "\n ");
+        } catch (IOException e) {
+            System.out.println("An error occurred while writing the report.");
+        } catch (NullPointerException npe) {
+            System.out.println("An error occurred while writing the report.");
         }
     }
 }

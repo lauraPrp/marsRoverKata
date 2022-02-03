@@ -3,6 +3,7 @@ package marsrover.rover;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
@@ -82,6 +83,16 @@ public class ControllerTest {
     @Test
     public void countRovers() {
         assertEquals(2, mainAppController.getRoverCount(), "rover count");
+    }
+
+    @Test
+    public void roverReportFile() {
+        File file = new File("report.txt");
+        ArrayList<Rover> roverList = mainAppController.getAllRovers();
+        mainAppController.startOperations(roverList);
+        mainAppController.saveFinalReport();
+
+        assertTrue(file.exists());
     }
 
 

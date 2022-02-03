@@ -66,6 +66,7 @@ public class Main {
 
         if (!fileContentFormallyInvalid && !errorOccurredWhileExecuting) {
             roverController.startOperations(rovers);
+            roverController.saveFinalReport();
         } else if (errorOccurredWhileExecuting) {
             System.out.println("Something went VERY WRONG. Operation Aborted. NASA wont hire me :( ");
         }
