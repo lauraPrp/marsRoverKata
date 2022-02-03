@@ -42,7 +42,6 @@ if a rover is supposed to start from a point where another rover is standing, it
 ```
 ✨***possible further implementation:***
 ```sh
--save rovers position in an text file
 -load a graphical map to show rover position an movements
 -list the possible movements and ask to confirm the path before actually moving the rover, instead of moving it step by step
 -consider different plateau shapes
