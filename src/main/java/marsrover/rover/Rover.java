@@ -43,56 +43,59 @@ public class Rover {
     }
 
 
-    public void executeCommandList(Plateau plateau) {
-        char[] commandlist = this.getMovementCommandList();
+    public void executeCommandList(Plateau plateau) throws UnsupportedOperationException {
+        char[] commandList = this.getMovementCommandList();
         try {
-            for (char element : commandlist) {
+            for (char element : commandList) {
                 singleCommand(element, plateau);
             }
-        } catch (UnsupportedOperationException use) {
-            //this exception stops here cause I logged the invalid movement/command in the rover message
-            //so it's traced, but I wanted to be able to test it in unit tests
-
+        }
+        catch(OutOfPlateauBoundaryException use) {
+            throw new UnsupportedOperationException("Rover out of plateau range");
+        }
+        catch (UnsupportedOperationException uoe ) {
+            throw new UnsupportedOperationException("error executing command");
+        }
+                catch (IllegalArgumentException iae ) {
+            throw new IllegalArgumentException("command not valid");
         }
     }
 
-    public void singleCommand(char command, Plateau plateau) {
+    public void singleCommand(char command, Plateau plateau) throws OutOfPlateauBoundaryException,IllegalArgumentException {
         char dir = this.getRoverDirection();
         try {
             switch (command) {
                 case 'R' -> dir = turnRight(dir);
                 case 'L' -> dir = turnLeft(dir);
                 case 'M' -> move(plateau);
-                default -> throw new UnsupportedOperationException();
+                default -> throw new IllegalArgumentException();
             }
-        } catch (UnsupportedOperationException ise) {
-            throw new UnsupportedOperationException();
+        }
+          catch (OutOfPlateauBoundaryException oobpe) {
+              this.setMessage(message += " Rover out of plateau range ");
+            throw new OutOfPlateauBoundaryException(" commands error,Rover out of plateau range ");
+        }
+        catch (UnsupportedOperationException uoe) {
+            this.setMessage(message += " error during movement ");
+            throw new UnsupportedOperationException("error during movement");
+        }
+        catch (IllegalArgumentException iae){
+            throw new IllegalArgumentException("command not valid");
+
         }
         this.setRoverdirection(dir);
     }
 
 
     private boolean isMovementValid(Coordinates targetPlace, Plateau grid) {
-        boolean isValid = true;
-        if (targetPlace.getX() < 0
-                || targetPlace.getY() < 0
-                || targetPlace.getX() > grid.getMaxX()
-                || targetPlace.getY() > grid.getMaxY()
-        )
-            return false;
+        return !(targetPlace.getX() < 0 || targetPlace.getY() < 0
+                || targetPlace.getX() > grid.getMaxX() || targetPlace.getY() > grid.getMaxY());
 
-        return isValid;
     }
 
     private boolean isThereAnObstacleinNextStep(Coordinates newCoordinates, ArrayList<Coordinates> obstacles) {
         boolean ret = false;
-        //for some reason the Arraylist.contains method returns false despite having an obstacle at the same coordinates of "new coordimnates"
-        /*@todo: investigate why*/
-    	/*if(obstacles.contains(newCoordinates))	System.out.println("obstacle: "+obstacles.toString());
-    	else System.out.println("no obstacle: ");
-        return obstacles.contains(newCoordinates);*/
-
-        if (obstacles.size() > 0) {
+          if (obstacles.size() > 0) {
             for (Coordinates obstacle : obstacles) {
                 if (obstacle.getX() == newCoordinates.getX() &&
                         obstacle.getY() == newCoordinates.getY())
@@ -102,8 +105,10 @@ public class Rover {
         return ret;
     }
 
-    private void move(Plateau plateau) throws UnsupportedOperationException {
+    private void move(Plateau plateau) throws OutOfPlateauBoundaryException,UnsupportedOperationException {
+
         char dir = this.getRoverDirection();
+
         Coordinates newCoordinates = new Coordinates(this.getRoverLocation().getX(), this.getRoverLocation().getY());
 
         switch (dir) {
@@ -111,20 +116,19 @@ public class Rover {
             case 'W' -> newCoordinates.setX(newCoordinates.getX() - 1);
             case 'S' -> newCoordinates.setY(newCoordinates.getY() - 1);
             case 'E' -> newCoordinates.setX(newCoordinates.getX() + 1);
-            default -> throw new UnsupportedOperationException("Error: new Coordinates invalid");
+            default -> throw new UnsupportedOperationException("invalid coordinates");
         }
         //errors to be logged in the object: obstacles and coordinates out of Plateau
         if (isMovementValid(newCoordinates, plateau)) {
             if (isThereAnObstacleinNextStep(newCoordinates, plateau.getObstacles())) {
                 this.setMessage(message += " Early stop, obstacle found. ");
-                throw new UnsupportedOperationException("Error: there is an obstacle");
 
             } else {
                 this.setRoverLocation(newCoordinates);
             }
         } else {
             this.setMessage(message += " Error: Rover out of plateau range: ");
-            throw new UnsupportedOperationException("Error: Rover out of plateau range");
+            throw new OutOfPlateauBoundaryException("Error: Rover out of plateau range");
         }
     }
 

@@ -1,10 +1,5 @@
 package marsrover.rover;
 
-import marsrover.rover.Controller;
-import marsrover.rover.Coordinates;
-import marsrover.rover.Plateau;
-import marsrover.rover.Rover;
-import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +17,7 @@ public class ControllerTest {
     public void setUp() throws FileNotFoundException {
 
         mainAppController = Controller.getControllerInstance();
-        mainAppController.initAll("testInput.txt");
+        mainAppController.initAll("autotests/testInput.txt");
         plateauGrid = mainAppController.getPlateau();
         allRovers = mainAppController.getAllRovers();
     }
@@ -55,12 +50,6 @@ public class ControllerTest {
     public void startOperations() {
         mainAppController.startOperations(allRovers);
         ArrayList<Rover> roverList = mainAppController.getAllRovers();
-
-        Coordinates rover1CoordinatesExpected = new Coordinates(1, 3);
-        Coordinates rover2CoordinatesExpected = new Coordinates(3, 3);
-
-        Rover rover1 = new Rover(rover1CoordinatesExpected, 'N');
-        Rover rover2 = new Rover(rover2CoordinatesExpected, 'E');
 
         assertEquals(1, roverList.get(0).getRoverLocation().getX());
         assertEquals(3, roverList.get(0).getRoverLocation().getY());

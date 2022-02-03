@@ -3,7 +3,6 @@ package marsrover.rover;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Controller {
@@ -33,10 +32,9 @@ public class Controller {
         allRovers = initRovers();
     }
 
-    private ArrayList<String> getInputFromFile(String filename) throws FileNotFoundException, NoSuchElementException {
+    private ArrayList<String> getInputFromFile(String filename) throws FileNotFoundException, IllegalArgumentException {
         ArrayList<String> allDataInput = new ArrayList<>();
         Scanner scanner = new Scanner(new File(filename));
-
         while (scanner.hasNext()) {
             allDataInput.add(scanner.next().toUpperCase());
         }
@@ -57,12 +55,10 @@ public class Controller {
     }
 
     private boolean validateInputFileData(ArrayList<String> inputToValidate) {
-        //@todo:this control should be done with a regular expression before loading the data in the array of strings!!
-        //6 is the minimum number of data : 2 numbers Plateau,2 numbers and a char for the rover and a String for commands
-        return ((inputToValidate.size() == 6)||
+        return ((inputToValidate.size() == 6) ||
                 (inputToValidate.size() > 6)
-                        && (inputToValidate.size()-6)% 4 == 0);
-            }
+                        && (inputToValidate.size() - 6) % 4 == 0);
+    }
 
     private void initPlateau() {
         plateau = new Plateau(Integer.parseInt(input.get(0)), Integer.parseInt(input.get(1)));
@@ -84,9 +80,9 @@ public class Controller {
 
                 roverToList.setMovementCommandList(input.get(i + 3).toCharArray());
                 allRovers.add(roverToList);
-            } catch (NumberFormatException nfe) {
+            } catch (IllegalArgumentException nfe) {
                 System.out.println(" check rovers position ");
-                throw new NumberFormatException("");
+                throw new IllegalArgumentException("");
             }
         }
         roverCount = allRovers.size();
@@ -110,7 +106,10 @@ public class Controller {
                 System.out.println("  " + singleRover.getMessage());
             }
         } catch (NullPointerException npe) {
-            System.out.println("Something went VERY WRONG. Operation Aborted. NASA wont hire me :( ");
+            System.out.println("ERROR: Something went VERY WRONG. Operation Aborted. NASA wont hire me :( ");
+        }
+        catch (UnsupportedOperationException uoe) {
+            System.out.println("ERROR: Something went VERY WRONG. Operation Aborted. NASA wont hire me :( ");
         }
     }
 }

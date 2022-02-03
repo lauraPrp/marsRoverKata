@@ -1,14 +1,11 @@
 package marsrover.rover;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.junit.Ignore;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class RoverTest {
     Plateau grid ;
@@ -22,7 +19,7 @@ public class RoverTest {
     }
 
     @Test
-    public void roverCommandTurnRightAndLeftAllPossibleCombinations() {
+    public void roverCommandTurnRightAndLeftAllPossibleCombinations() throws OutOfPlateauBoundaryException {
 
         /* sequential acts/asserts */
         rover.singleCommand('R', grid);
@@ -43,12 +40,12 @@ public class RoverTest {
         assertEquals('N', rover.getRoverDirection(), "turn left");
 
         //assert
-        assertThrows(UnsupportedOperationException.class, () -> rover.singleCommand('X', grid));
+        assertThrows(IllegalArgumentException.class, () -> rover.singleCommand('X', grid));
 
     }
 
     @Test
-    public void roverRealPassingTestCaseExampleGiven1() throws IllegalStateException {
+    public void roverRealPassingTestCaseExampleGiven1()  {
         /* act */
         rover.setRoverLocation(new Coordinates(1, 2));
         rover.setMovementCommandList("LMLMLMLMM".toCharArray());
@@ -62,7 +59,7 @@ public class RoverTest {
     }
 
     @Test
-    public void roverRealPassingTestCaseExampleGiven2() throws IllegalStateException {
+    public void roverRealPassingTestCaseExampleGiven2()  {
         /* act */
         rover.setRoverLocation(new Coordinates(3, 3));
         rover.setRoverdirection('E');
@@ -75,12 +72,12 @@ public class RoverTest {
     }
 
     @Test
-    public void invalidCommandInput() throws IllegalStateException {
-        assertThrows(UnsupportedOperationException.class, () -> rover.singleCommand('X', grid));
+    public void invalidCommandInput() throws IllegalArgumentException {
+        assertThrows(IllegalArgumentException.class, () -> rover.singleCommand('X', grid));
     }
 
     @Test
-    void invalidMoveObstacleFoundThrowsExceptionAndMessage() {
+    void invalidMoveObstacleFoundThrowsExceptionAndMessage() throws OutOfPlateauBoundaryException {
 
         rover.setRoverLocation(new Coordinates(1, 2));
         rover.setRoverdirection('N');
@@ -94,12 +91,12 @@ public class RoverTest {
     }
 
     @Test
-    void invalidCommandListInput() {
+    void invalidCommandListInputOutOfPlateau() throws OutOfPlateauBoundaryException {
 
         rover.setRoverLocation(new Coordinates(1, 2));
         rover.setRoverdirection('N');
         grid.addObstacle(new Coordinates(1, 3));
-        rover.setMovementCommandList("MMMMMMMMMMMMMMMM".toCharArray());
+        rover.setMovementCommandList("MMMMMMMMMMMMMMMMMMMMMMM".toCharArray());
         rover.executeCommandList(grid);
 
         IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
@@ -109,18 +106,16 @@ public class RoverTest {
     }
 
     @Test
-    void invalidCommandOutOfPlateau() {
+    void invalidSingleCommandInCommandsList () throws IllegalArgumentException,UnsupportedOperationException {
         /* act */
         rover.setRoverLocation(new Coordinates(1, 2));
         rover.setRoverdirection('N');
         grid.addObstacle(new Coordinates(1, 3));
         rover.setMovementCommandList("MMMPGT".toCharArray());
-        rover.executeCommandList(grid);
+
         /* assert */
-        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
-            throw new IllegalStateException("Error: Rover out of plateau range");
-        });
-        assertEquals("Error: Rover out of plateau range", exception.getMessage());
+        assertThrows(IllegalArgumentException.class, () ->
+                rover.executeCommandList(grid), "command not valid");
     }
 
 }

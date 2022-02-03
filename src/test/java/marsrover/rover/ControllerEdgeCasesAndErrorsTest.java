@@ -6,8 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ControllerEdgeCasesAndErrorsTest {
 
@@ -19,7 +18,7 @@ public class ControllerEdgeCasesAndErrorsTest {
     }
 
     @Test
-    public void unexistentFile() {
+    public void nonexistentFile() {
 
         Plateau grid = mainApp.getPlateau();
         ArrayList<Rover> rovers = mainApp.getAllRovers();
@@ -28,13 +27,13 @@ public class ControllerEdgeCasesAndErrorsTest {
 
     @Test
     public void wrongFileInvalidRoverPosition() {
-        assertThrows(NumberFormatException.class, () ->
-                mainApp.initAll("testInputWrongFormat.txt"), "input invalid, check format");
+        assertThrows(IllegalArgumentException.class, () ->
+                mainApp.initAll("autotests/testInputWrongFormat.txt"), "input invalid, check format");
     }
 
     @Test
     public void checkPositionIfRoverMeetAnObstacle() throws FileNotFoundException {
-        mainApp.initAll("testInputWithObstacle.txt");
+        mainApp.initAll("autotests/testInputWithObstacle.txt");
         ArrayList<Rover> roverList = mainApp.getAllRovers();
         mainApp.startOperations(roverList);
 
@@ -46,6 +45,7 @@ public class ControllerEdgeCasesAndErrorsTest {
 
         assertEquals(1, roverList.get(2).getRoverLocation().getX());
         assertEquals(2, roverList.get(2).getRoverLocation().getY());
+        assertNotNull(roverList.get(2).getMessage());
 
     }
 
