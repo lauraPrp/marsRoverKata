@@ -1,9 +1,7 @@
 package marsrover.rover;
 
-import java.util.ArrayList;
 
 public class Rover {
-
     private Coordinates roverCoordinates;
     private char direction;
     private char[] movementCommandList;
@@ -38,7 +36,7 @@ public class Rover {
         this.roverCoordinates = newCoordinates;
     }
 
-    public void setRoverdirection(char newDirection) {
+    public void setRoverDirection(char newDirection) {
         this.direction = newDirection;
     }
 
@@ -72,7 +70,7 @@ public class Rover {
             }
         }
           catch (OutOfPlateauBoundaryException oobpe) {
-              this.setMessage(message += " Rover out of plateau range ");
+          //    this.setMessage(message += " Rover out of plateau range ");
             throw new OutOfPlateauBoundaryException(" commands error,Rover out of plateau range ");
         }
         catch (UnsupportedOperationException uoe) {
@@ -83,27 +81,11 @@ public class Rover {
             throw new IllegalArgumentException("command not valid");
 
         }
-        this.setRoverdirection(dir);
+        this.setRoverDirection(dir);
     }
 
 
-    private boolean isMovementValid(Coordinates targetPlace, Plateau grid) {
-        return !(targetPlace.getX() < 0 || targetPlace.getY() < 0
-                || targetPlace.getX() > grid.getMaxX() || targetPlace.getY() > grid.getMaxY());
 
-    }
-
-    private boolean isThereAnObstacleinNextStep(Coordinates newCoordinates, ArrayList<Coordinates> obstacles) {
-        boolean ret = false;
-          if (obstacles.size() > 0) {
-            for (Coordinates obstacle : obstacles) {
-                if (obstacle.getX() == newCoordinates.getX() &&
-                        obstacle.getY() == newCoordinates.getY())
-                    return true;
-            }
-        }
-        return ret;
-    }
 
     private void move(Plateau plateau) throws OutOfPlateauBoundaryException,UnsupportedOperationException {
 
@@ -118,9 +100,8 @@ public class Rover {
             case 'E' -> newCoordinates.setX(newCoordinates.getX() + 1);
             default -> throw new UnsupportedOperationException("invalid coordinates");
         }
-        //errors to be logged in the object: obstacles and coordinates out of Plateau
-        if (isMovementValid(newCoordinates, plateau)) {
-            if (isThereAnObstacleinNextStep(newCoordinates, plateau.getObstacles())) {
+        if (plateau.isMovementOutOfPlateau(newCoordinates, plateau)) {
+            if (plateau.isThereAnObstacleinNextStep(newCoordinates, plateau.getObstacles())) {
                 this.setMessage(message += " Early stop, obstacle found. ");
 
             } else {

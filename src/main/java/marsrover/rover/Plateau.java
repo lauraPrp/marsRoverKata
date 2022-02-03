@@ -30,8 +30,21 @@ public class Plateau {
         obstacles.add(obstaclesCoord);
     }
 
-    @Override
-    public String toString() {
-        return "Grid{}" + maxX + " " + maxY;
+    protected boolean isMovementOutOfPlateau(Coordinates targetPlace, Plateau grid) {
+        return !(targetPlace.getX() < 0 || targetPlace.getY() < 0
+                || targetPlace.getX() > grid.getMaxX() || targetPlace.getY() > grid.getMaxY());
+
+    }
+
+    protected boolean isThereAnObstacleinNextStep(Coordinates newCoordinates, ArrayList<Coordinates> obstacles) {
+        boolean ret = false;
+        if (obstacles.size() > 0) {
+            for (Coordinates obstacle : obstacles) {
+                if (obstacle.getX() == newCoordinates.getX() &&
+                        obstacle.getY() == newCoordinates.getY())
+                    return true;
+            }
+        }
+        return ret;
     }
 }

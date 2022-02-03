@@ -1,7 +1,5 @@
 package marsrover.rover;
 
-import org.junit.Ignore;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -62,7 +60,7 @@ public class RoverTest {
     public void roverRealPassingTestCaseExampleGiven2()  {
         /* act */
         rover.setRoverLocation(new Coordinates(3, 3));
-        rover.setRoverdirection('E');
+        rover.setRoverDirection('E');
         rover.setMovementCommandList("MMRMMRMRRM".toCharArray());
         rover.executeCommandList(grid);
         /* assert */
@@ -80,7 +78,7 @@ public class RoverTest {
     void invalidMoveObstacleFoundThrowsExceptionAndMessage() throws OutOfPlateauBoundaryException {
 
         rover.setRoverLocation(new Coordinates(1, 2));
-        rover.setRoverdirection('N');
+        rover.setRoverDirection('N');
         grid.addObstacle(new Coordinates(1, 3));
         rover.setMovementCommandList("MMM".toCharArray());
         rover.executeCommandList(grid);
@@ -94,7 +92,7 @@ public class RoverTest {
     void invalidCommandListInputOutOfPlateau() throws OutOfPlateauBoundaryException {
 
         rover.setRoverLocation(new Coordinates(1, 2));
-        rover.setRoverdirection('N');
+        rover.setRoverDirection('N');
         grid.addObstacle(new Coordinates(1, 3));
         rover.setMovementCommandList("MMMMMMMMMMMMMMMMMMMMMMM".toCharArray());
         rover.executeCommandList(grid);
@@ -109,7 +107,7 @@ public class RoverTest {
     void invalidSingleCommandInCommandsList () throws IllegalArgumentException,UnsupportedOperationException {
         /* act */
         rover.setRoverLocation(new Coordinates(1, 2));
-        rover.setRoverdirection('N');
+        rover.setRoverDirection('N');
         grid.addObstacle(new Coordinates(1, 3));
         rover.setMovementCommandList("MMMPGT".toCharArray());
 

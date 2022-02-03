@@ -3,38 +3,18 @@ package App;
 import marsrover.rover.Controller;
 import marsrover.rover.OutOfPlateauBoundaryException;
 import marsrover.rover.Rover;
+import marsrover.rover.Validation;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 
 public class Main {
     private static ArrayList<Rover> rovers;
-    private static boolean fileContainsInvalidCommand =false;
-    private static boolean isThereAnErrorInInputFile =false ;
 
-    public static boolean fileContainsInvalidCommands(String file) throws FileNotFoundException {
-        ArrayList<String> allDataInput = new ArrayList<>();
-        Scanner scanner = new Scanner(new File(file));
-        while (scanner.hasNext()) {
-            allDataInput.add(scanner.next().toUpperCase());
-        }
-
-        Pattern pattern = Pattern.compile("[^RLMNSEW[0-9]]", Pattern.CASE_INSENSITIVE);
-        Matcher matcher ;
-        for(String line :allDataInput) {
-            fileContainsInvalidCommand =  pattern.matcher(line).find();
-            if(fileContainsInvalidCommand)
-            break;
-        }
-        return fileContainsInvalidCommand;
-    }
 
     public static void main(String[] args) throws OutOfPlateauBoundaryException {
-
 
         Controller roverController = Controller.getControllerInstance();
 
@@ -46,6 +26,7 @@ public class Main {
         System.out.println("Enter 4 to test the case which have obstacles ");
         System.out.println("Enter 5 to test the case which have wrong coordinates for the rover at start ");
         System.out.println("Enter 6 to use a custom test file entering the file name(txt format)");
+
         String file = in.nextLine();
         String inputTestFromConsole = switch (file) {
 
@@ -58,38 +39,35 @@ public class Main {
             default -> "";
 
         };
-
-
         execute(roverController, inputTestFromConsole);
-
-
     }
 
-    private static void execute(Controller roverController, String inputTestFromConsole) throws OutOfPlateauBoundaryException {
+    private static void execute(Controller roverController, String inputTestFromConsole) {
+        boolean fileContentFormallyInvalid = false;
+        boolean errorOccurredWhileExecuting = false;
         try {
-            if (!fileContainsInvalidCommands(inputTestFromConsole)) {
-                roverController.initAll(inputTestFromConsole);
+            fileContentFormallyInvalid = Validation.fileContainsInvalidDigit(inputTestFromConsole);
 
+            if (!fileContentFormallyInvalid) {
+                roverController.initAll(inputTestFromConsole);
                 rovers = roverController.getAllRovers();
-            }
-            else {
+            } else {
                 System.out.println("File contains invalid commands, check format and try again");
             }
         } catch (FileNotFoundException exc) {
             System.out.println("Check input file");
-            isThereAnErrorInInputFile = true;
+            errorOccurredWhileExecuting = true;
         } catch (NumberFormatException exc) {
             System.out.println("Check rover coordinates");
-            isThereAnErrorInInputFile = true;
-        }
-        catch (UnsupportedOperationException exc) {
-            isThereAnErrorInInputFile = true;
+            errorOccurredWhileExecuting = true;
+        } catch (UnsupportedOperationException exc) {
+            errorOccurredWhileExecuting = true;
         }
 
-        if (isThereAnErrorInInputFile) {
-            System.out.println("Something went VERY WRONG. Operation Aborted. NASA wont hire me :( ");
-        } else if(!fileContainsInvalidCommand) {
+        if (!fileContentFormallyInvalid && !errorOccurredWhileExecuting) {
             roverController.startOperations(rovers);
+        } else if (errorOccurredWhileExecuting) {
+            System.out.println("Something went VERY WRONG. Operation Aborted. NASA wont hire me :( ");
         }
     }
 }
