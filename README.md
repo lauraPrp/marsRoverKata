@@ -4,8 +4,8 @@ Program to simulate rovers movement around the surface of Mars
 ![](assets/walle.gif) Thanks to https://github.com/ianmartinez/AsciiStudio for this image 
 
 
-To start the simulation run the App/Main.java class running the Main class, some test cases are already available,
-using number 1-5  you can see in the console output where they move.
+To start the simulation run App/Main.java, some test cases are already available,
+using number 1-5  you can see in the console output where they stop, or check the report.txt file.
 
 ✨***TEST CASES FROM MAIN APP***
 ```sh
