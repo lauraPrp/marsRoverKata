@@ -4,5 +4,7 @@
   </component>
   <component name="UISettings">
     <option name="MAX_LOOKUP_WIDTH2" value="956" />
+    <option name="OVERRIDE_NONIDEA_LAF_FONTS" value="true" />
+    <option name="CONTRAST_SCROLLBARS" value="true" />
   </component>
 </application>
