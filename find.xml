@@ -1,8 +1,8 @@
 <application>
   <component name="FindSettings">
-    <option name="customScope" value="Directory '…\src\com\marsrover\model'" />
-    <option name="defaultScopeName" value="Directory '…\src\com\marsrover\model'" />
-    <option name="SEARCH_SCOPE" value="Directory '…\src\com\marsrover\model'" />
+    <option name="customScope" value="File '…\src\main\java\org\laura\cinnamoncinema\Cinema.java'" />
+    <option name="defaultScopeName" value="File '…\src\main\java\org\laura\cinnamoncinema\Cinema.java'" />
+    <option name="SEARCH_SCOPE" value="File '…\src\main\java\org\laura\cinnamoncinema\Cinema.java'" />
     <mask>*.css</mask>
     <mask>*.html</mask>
     <mask>*.xml</mask>
