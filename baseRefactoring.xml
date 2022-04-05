@@ -8,6 +8,8 @@
     <option name="RENAME_SEARCH_FOR_TEXT_FOR_METHOD" value="true" />
     <option name="TYPE_COOK_EXHAUSTIVE" value="true" />
     <option name="TYPE_COOK_COOK_OBJECTS" value="true" />
+    <option name="INTRODUCE_PARAMETER_REPLACE_FIELDS_WITH_GETTERS" value="1" />
     <option name="INTRODUCE_LOCAL_CREATE_FINALS" value="false" />
+    <option name="INTRODUCE_PARAMETER_CREATE_FINALS" value="false" />
   </component>
 </application>
