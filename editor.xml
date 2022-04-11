@@ -1,0 +1,7 @@
+<application>
+  <component name="TodoConfiguration">
+    <pattern pattern="\btodo-ignore\b.*" />
+    <pattern pattern="\bfixme-ignore\b.*" />
+    <pattern case-sensitive="true" pattern="\bREFACTOR\b.*" />
+  </component>
+</application>
