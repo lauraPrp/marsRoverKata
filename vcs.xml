@@ -66,9 +66,17 @@
           <option name="url" value="https://github.com/in28minutes/functional-programming-with-java.git" />
           <option name="userName" value="" />
         </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="https://github.com/swkBerlin/kata-bootstraps/tree/master/java/junit5" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="https://github.com/swkBerlin/kata-bootstraps.git" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
       </list>
     </option>
-    <option name="cloneParentDir" value="C:\Users\laura\returners" />
+    <option name="cloneParentDir" value="C:\Users\laura\returners\katas" />
   </component>
   <component name="Vcs.Log.App.Settings">
     <option name="COLUMN_ID_ORDER">
