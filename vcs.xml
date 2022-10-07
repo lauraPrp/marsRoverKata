@@ -74,9 +74,13 @@
           <option name="url" value="https://github.com/swkBerlin/kata-bootstraps.git" />
           <option name="userName" value="" />
         </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="https://github.com/the-creative-tester/consumer-driven-contract-testing-example.git" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
       </list>
     </option>
-    <option name="cloneParentDir" value="C:\Users\laura\returners\katas" />
+    <option name="cloneParentDir" value="C:\Users\laura\java" />
   </component>
   <component name="Vcs.Log.App.Settings">
     <option name="COLUMN_ID_ORDER">
